@@ -45,4 +45,5 @@ Homestead.json
 .history
 .ionide
 
+/config/database.php
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,laravel
