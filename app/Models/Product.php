@@ -13,7 +13,7 @@ class Product extends Model
         'name', 
         'image', 
         'brand_id', 
-        'categories_id', 
+        'category_id',
         'quantity', 
         'rate', 
         'active', 

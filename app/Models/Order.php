@@ -27,4 +27,8 @@ class Order extends Model
         'order_status', 
         'user_id'
     ];
+
+    public function getOrderItem(){
+        return $this->hasMany('App\Models\Ordre_item');
+    }
 }
