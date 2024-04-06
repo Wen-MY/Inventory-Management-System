@@ -9,9 +9,6 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'order_id';
-    public $timestamps = true;
-
     protected $fillable = [
         'date', 
         'client_name', 
@@ -29,9 +26,5 @@ class Order extends Model
         'gstn', 
         'order_status', 
         'user_id'
-    ];
-
-    protected $guarded = [
-        'order_id'
     ];
 }

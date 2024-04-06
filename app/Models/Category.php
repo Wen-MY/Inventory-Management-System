@@ -13,16 +13,10 @@ class Category extends Model
      *
      * @var array<int, string>
      */
-    protected $primaryKey = 'categories_id';
-    public $timestamps = true;
-
     protected $fillable = [
         'name',
         'active',
         'status'
     ];
 
-    protected $guarded = [
-        'categories_id'
-    ];
 }

@@ -14,7 +14,7 @@ class CreateBrandsTable extends Migration
     public function up()
     {
         Schema::create('brands', function (Blueprint $table) {
-            $table->increments('brand_id'); // Changing to auto-incrementing primary key
+            $table->id();
             $table->string('name');
             $table->integer('active')->default(0);
             $table->integer('status')->default(0);

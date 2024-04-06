@@ -24,7 +24,6 @@ class Order_item extends Model
         'total',
         'status'
     ];
-    protected $guarded = ['order_item_id'];
     
     public function getOrder(){
         return $this->hasOne('App\Models\Order');

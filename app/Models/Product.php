@@ -9,9 +9,6 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'product_id';
-    public $timestamps = true;
-
     protected $fillable = [
         'name', 
         'image', 
@@ -20,7 +17,6 @@ class Product extends Model
         'quantity', 
         'rate', 
         'active', 
-        'status'];
-
-    protected $guarded = ['product_id'];
+        'status'
+    ];
 }

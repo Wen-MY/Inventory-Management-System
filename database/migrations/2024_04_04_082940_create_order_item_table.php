@@ -14,12 +14,12 @@ class CreateOrderItemTable extends Migration
     public function up()
     {
         Schema::create('order_item', function (Blueprint $table) {
-            $table->increments('order_item_id'); // Changing to auto-incrementing primary key
-            $table->integer('order_id')->unsigned();
-            $table->integer('product_id')->unsigned();
-            $table->string('quantity');
-            $table->string('rate');
-            $table->string('total');
+            $table->id();
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('product_id')->unsigned();
+            $table->string('quantity',255);
+            $table->string('rate',255);
+            $table->string('total',255);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

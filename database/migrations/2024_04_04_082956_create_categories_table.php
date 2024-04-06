@@ -14,8 +14,8 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->increments('categories_id'); // Changing to auto-incrementing primary key
-            $table->string('name');
+            $table->id();
+            $table->string('name',255);
             $table->integer('active')->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();

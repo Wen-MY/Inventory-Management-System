@@ -15,22 +15,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $primaryKey = 'user_id';
-    public $timestamps = false;
 
     protected $fillable = [
         'username',
         'password',
         'email',
-        'role_id'
     ];
-    
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    protected $guarded = ['user_id'];
 
     /**
      * The attributes that should be hidden for serialization.
