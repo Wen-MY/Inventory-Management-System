@@ -14,7 +14,23 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->increments('order_id'); 
+            $table->date('date');
+            $table->string('client_name');
+            $table->string('client_contact');
+            $table->string('sub_total');
+            $table->string('vat');
+            $table->string('total_amount');
+            $table->string('discount');
+            $table->string('grand_total');
+            $table->string('paid');
+            $table->string('due');
+            $table->integer('payment_type');
+            $table->integer('payment_status');
+            $table->integer('payment_place');
+            $table->string('gstn');
+            $table->integer('order_status')->default(0);
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
@@ -29,3 +45,4 @@ class CreateOrdersTable extends Migration
         Schema::dropIfExists('orders');
     }
 }
+

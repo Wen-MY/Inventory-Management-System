@@ -9,18 +9,23 @@ class Order_item extends Model
 {
     use HasFactory;
     protected $table = 'order_item';
-    protected $timestamps = false;
+    protected $primaryKey = 'order_item_id';
+    protected $timestamps = true;
         /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'order_id',
+        'product_id',
         'quantity',
         'rate',
         'total',
         'status'
     ];
+    protected $guarded = ['order_item_id'];
+    
     public function getOrder(){
         return $this->hasOne('App\Models\Order');
     }

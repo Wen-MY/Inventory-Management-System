@@ -14,7 +14,15 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->increments('product_id'); // Changing to auto-incrementing primary key
+            $table->string('name');
+            $table->text('image');
+            $table->integer('brand_id')->unsigned();
+            $table->integer('categories_id')->unsigned();
+            $table->string('quantity');
+            $table->string('rate');
+            $table->integer('active')->default(0);
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

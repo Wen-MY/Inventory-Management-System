@@ -13,9 +13,17 @@ class Brand extends Model
      *
      * @var array<int, string>
      */
+
+    protected $primaryKey = 'brand_id';
+    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'active',
         'status'
+    ];
+
+    protected $guarded = [
+        'brand_id'
     ];
 }
