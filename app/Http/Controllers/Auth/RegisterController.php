@@ -48,19 +48,9 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Show the admin registration form.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showAdminRegisterForm()
+    public function showRegisterForm()
     {
-        return view('auth.register', ['url' => 'admin']);
-    }
-
-    public function showUserRegisterForm()
-    {
-        return view('auth.register', ['url' => 'user']);
+        return view('auth.register');
     }
 
     /**
@@ -69,7 +59,7 @@ class RegisterController extends Controller
      * @param array $data
      * @return mixed
      */
-    protected function createUser(Request $request)
+    protected function register(Request $request)
     {
         $this->validator($request->all())->validate();
 
@@ -77,29 +67,9 @@ class RegisterController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 0,
+            'role' => "staff",
         ]);
 
-        return redirect()->intended('login/user');
-    }
-
-    /**
-     * Create a new admin user instance after a valid registration.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function createAdmin(Request $request)
-    {
-        $this->validator($request->all())->validate();
-
-        User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => 1,
-        ]);
-
-        return redirect()->intended('login/admin');
+        return redirect()->intended('/');
     }
 }

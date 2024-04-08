@@ -30,43 +30,23 @@ class LoginController extends Controller
         $this->middleware('guest:admin')->except('logout');
     }
 
-    public function showAdminLoginForm()
+    public function showLoginForm()
     {
-        return view('auth.login', ['url' => 'admin']);
+        return view('auth.login');
     }
 
-    public function adminLogin(Request $request)
+    public function login(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required|min:5'
         ]);
-
+    
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
-            return redirect()->intended('/admin');
+            $request->session()->put('user', Auth::user()->name);
+            return redirect()->intended('/home');
         }
-
-        return back()->withInput($request->only('email', 'remember'));
-    }
-
-    public function showUserLoginForm()
-    {
-        return view('auth.login', ['url' => 'user']);
-    }
-
-    public function userLogin(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required|min:5'
-        ]);
-
-        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
-            return redirect()->intended('/user');
-        } else {
-            return back()->withInput($request->only('email', 'remember'));
-        }
-
+    
         return back()->withInput($request->only('email', 'remember'));
     }
 }
