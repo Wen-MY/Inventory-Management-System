@@ -28,7 +28,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'username' => 'required|username',
             'password' => 'required|string|min:5',
         ]);
     
@@ -55,19 +55,19 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
-
+    
         $user = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)],
             ['role' => 'staff']
         ));
-
-        redirect('/login');
-    }
+    
+        return redirect('/login');
+    }    
 
     /**
      * Log the user out (Invalidate the token).

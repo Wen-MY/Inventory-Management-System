@@ -18,9 +18,10 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/', function () {
     return redirect('/login');
 });
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::get('/register', [RegisterController::class,'showRegisterForm'])->name('register');;
 Route::get('/home', function () { return view('home'); });
+Route::get('logout', [LoginController::class,'logout']);
 
 
 

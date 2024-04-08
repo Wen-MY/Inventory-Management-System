@@ -3,23 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if ($guard == "admin" && Auth::guard($guard)->check()) {
-            return redirect('/admin');
+        if ($request->header('Authorization')) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        if ($guard == "web" && Auth::guard($guard)->check()) {
-            return redirect('/user');
-        }
-
-        // if (Auth::guard($guard)->check()) {
-        //     return redirect('/home');
-        // }
 
         return $next($request);
     }

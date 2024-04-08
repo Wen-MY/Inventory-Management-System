@@ -1,4 +1,82 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stock Management System</title>
+
+    <style>
+        .btn-link {
+            margin-top: 150px;
+        }
+    </style>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
+    <!-- jQuery -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row vertical">
+            <div class="col-md-5 col-md-offset-4">
+                <a href="/register" class="btn btn-link">Register</a>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="messages"></div>
+                        <form class="form-horizontal" onsubmit="loginUser(event)" id="loginForm">
+                            @csrf
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="username" class="col-sm-2 control-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="username" name="username"
+                                            placeholder="Username" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="col-sm-2 control-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Password" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default"> <i
+                                                class="glyphicon glyphicon-log-in"></i> Sign in</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <!-- panel-body -->
+                </div>
+                <!-- /panel -->
+            </div>
+            <!-- /col-md-4 -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- container -->
+</body>
 
 <script>
     function loginUser(event) {
@@ -17,7 +95,7 @@
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.error('Login failed');
+                    throw new Error('Login failed');
                 }
             })
             .then(data => {
@@ -25,77 +103,10 @@
                 window.location.href = '/home';
             })
             .catch(error => {
-                console.error('Error:', error);
+                document.querySelector('.messages').innerHTML =
+                    '<div class="alert alert-danger" role="alert">Login failed. Please check your credentials.</div>';
             });
     }
 </script>
 
-@section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        {{ __('Login') }}
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" onsubmit="loginUser(event)" aria-label="{{ __('Login') }}">
-                            @csrf
-                            <div class="form-group row">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-                                <div class="col-md-6">
-                                    <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="password"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-                                <div class="col-md-6">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required autocomplete="current-password">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                            {{ old('remember') ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Login') }}
-                                    </button>
-                                    @if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            {{ __('Forgot Your Password?') }}
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
+</html>
