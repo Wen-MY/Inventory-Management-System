@@ -97,4 +97,50 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Failed to delete category.'], 500);
         }
     }
+        /**
+     * Soft delete the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function softDelete($id)
+    {
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        
+        $category->delete();
+        
+        return response()->json(['message' => 'Category soft deleted'], 200);
+    }
+
+    /**
+     * Display a listing of the soft deleted resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function softDeleted()
+    {
+        $categories = Category::onlyTrashed()->get();
+        return response()->json(['categories' => $categories], 200);
+    }
+
+    /**
+     * Restore the specified soft deleted resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $category = Category::withTrashed()->find($id);
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        
+        $category->restore();
+        
+        return response()->json(['message' => 'Category restored successfully'], 200);
+    }
 }

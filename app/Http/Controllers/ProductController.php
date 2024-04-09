@@ -129,4 +129,51 @@ class ProductController extends Controller
             return response()->json(['message' => 'Failed to delete product.'], 500);
         }
     }
+
+        /**
+     * Soft delete the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function softDelete($id)
+    {
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        
+        $product->delete();
+        
+        return response()->json(['message' => 'Product soft deleted'], 200);
+    }
+
+    /**
+     * Display a listing of the soft deleted resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function softDeleted()
+    {
+        $products = Product::onlyTrashed()->get();
+        return response()->json(['products' => $products], 200);
+    }
+
+    /**
+     * Restore the specified soft deleted resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $product = Product::withTrashed()->find($id);
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        
+        $product->restore();
+        
+        return response()->json(['message' => 'Product restored successfully'], 200);
+    }
 }

@@ -98,4 +98,51 @@ class BrandController extends Controller
             return response()->json(['message' => 'Failed to delete brand.'], 500);
         }
     }
+
+        /**
+     * Soft delete the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function softDelete($id)
+    {
+        $brand = Brand::find($id);
+        if (!$brand) {
+            return response()->json(['message' => 'Brand not found'], 404);
+        }
+        
+        $brand->delete();
+        
+        return response()->json(['message' => 'Brand soft deleted'], 200);
+    }
+
+    /**
+     * Display a listing of the soft deleted resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function softDeleted()
+    {
+        $brands = Brand::onlyTrashed()->get();
+        return response()->json(['brands' => $brands], 200);
+    }
+
+    /**
+     * Restore the specified soft deleted resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $brand = Brand::withTrashed()->find($id);
+        if (!$brand) {
+            return response()->json(['message' => 'Brand not found'], 404);
+        }
+        
+        $brand->restore();
+        
+        return response()->json(['message' => 'Brand restored successfully'], 200);
+    }
 }

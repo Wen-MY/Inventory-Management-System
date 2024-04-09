@@ -80,4 +80,51 @@ class UserController extends Controller
             return response()->json(['message' => 'Failed to delete user.'], 500);
         }
     }
+
+        /**
+     * Soft delete the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function softDelete($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        
+        $user->delete();
+        
+        return response()->json(['message' => 'User soft deleted'], 200);
+    }
+
+    /**
+     * Display a listing of the soft deleted resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function softDeleted()
+    {
+        $users = User::onlyTrashed()->get();
+        return response()->json(['users' => $users], 200);
+    }
+
+    /**
+     * Restore the specified soft deleted resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        
+        $user->restore();
+        
+        return response()->json(['message' => 'User restored successfully'], 200);
+    }
 }

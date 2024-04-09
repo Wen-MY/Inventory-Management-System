@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
     public $timestamps = true;
 
     protected $fillable = [
@@ -29,7 +31,14 @@ class Order extends Model
         'user_id'
     ];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array<int, string>
+     */
+    protected $dates = ['deleted_at'];
+
     public function getOrderItem(){
-        return $this->hasMany('App\Models\Ordre_item');
+        return $this->hasMany('App\Models\Order_item');
     }
 }

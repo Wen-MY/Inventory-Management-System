@@ -124,4 +124,51 @@ class OrderController extends Controller
             return response()->json(['message' => 'Failed to delete order.'], 500);
         }
     }
+
+        /**
+     * Soft delete the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function softDelete($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        
+        $order->delete();
+        
+        return response()->json(['message' => 'Order soft deleted'], 200);
+    }
+
+    /**
+     * Display a listing of the soft deleted resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function softDeleted()
+    {
+        $orders = Order::onlyTrashed()->get();
+        return response()->json(['orders' => $orders], 200);
+    }
+
+    /**
+     * Restore the specified soft deleted resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $order = Order::withTrashed()->find($id);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+        
+        $order->restore();
+        
+        return response()->json(['message' => 'Order restored successfully'], 200);
+    }
 }
