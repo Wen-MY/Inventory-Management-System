@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +19,9 @@ use App\Http\Controllers\Auth\RegisterController;
 Route::get('/', function () {
     return redirect('/login');
 });
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login')->middleware('guest');
-Route::get('/register', [RegisterController::class,'showRegisterForm'])->name('register');;
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('redirectIfAuthenticated','guest');
+Route::get('/register', [AuthController::class,'showRegisterForm'])->name('register')->middleware('redirectIfAuthenticated','guest');
 Route::get('/home', function () { return view('home'); });
-Route::get('logout', [LoginController::class,'logout']);
 
 
 

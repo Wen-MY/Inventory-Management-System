@@ -107,6 +107,11 @@
                     '<div class="alert alert-danger" role="alert">Login failed. Please check your credentials.</div>';
             });
     }
+    window.onload = function() {
+        if (localStorage.getItem('token')) {
+            window.location.href = '/home'; // Redirect to home page if already logged in
+        }
+    }
 </script>
 
 </html>

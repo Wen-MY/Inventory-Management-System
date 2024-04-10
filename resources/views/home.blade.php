@@ -24,6 +24,25 @@
             })
             .catch(error => console.error('Error:', error));
     }
+    function logout(event) {
+        event.preventDefault(); // Prevent the default form submission
+        var token = localStorage.getItem('token'); // Assuming you stored the token as 'token'
+        fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }else{
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
 </script>
 
 @section('content')
@@ -47,7 +66,7 @@
                     </div>
                 @endcan
 
-                <form id="logout-form" action="{{ url('api/logout') }}" method="POST">
+                <form id="logout-form" onsubmit="logout(event)" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-danger btn-lg">Logout</button>
                 </form>

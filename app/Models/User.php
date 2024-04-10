@@ -11,15 +11,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable ,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    public $timestamps = true;
-    protected $primaryKey = 'user_id';
 
     protected $fillable = [
         'username',
@@ -42,7 +40,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
+    //protected $dates = ['deleted_at'];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
