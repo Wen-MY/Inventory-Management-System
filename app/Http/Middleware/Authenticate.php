@@ -1,28 +1,26 @@
 <?php
 
-// app/Http/Middleware/Authenticate.php
-
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class Authenticate
 {
-    public function handle(Request $request, Closure $next)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
     {
-        try {
-            $user = JWTAuth::parseToken()->authenticate();
-            if (!$user) {
-                return redirect('/login'); // Redirect to login if user not found
-            }
-        } catch (\Exception $e) {
-            return redirect('/login'); // Redirect to login on token error
+        if (!Auth::check()) {
+            // If the user is not authenticated, redirect them to the login page
+            return redirect('/login'); // Change '/login' to the desired login URL
         }
 
         return $next($request);
     }
 }
-

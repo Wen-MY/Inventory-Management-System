@@ -101,7 +101,7 @@
 
         var formData = new FormData(event.target);
 
-        fetch('/api/register', {
+        fetch('/register', {
                 method: 'POST',
                 body: formData,
                 headers: {

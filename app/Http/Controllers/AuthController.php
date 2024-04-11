@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 use Validator;
 
@@ -17,6 +18,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'username' => 'required|username',
             'password' => 'required|string|min:5',
@@ -28,8 +30,11 @@ class AuthController extends Controller
     
         if (!$token = Auth::attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
-        }        
-    
+        }
+        // Store the authenticated user in the session
+        $user = Auth::user();
+        Session::put('user', $user);
+        $token = Auth::guard('api')->attempt($validator->validated());
         return $this->createNewToken($token);
     }
 
@@ -67,7 +72,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-
+        Session::forget('user');
         return response()->json(['message' => 'User successfully signed out']);
     }
 
@@ -100,10 +105,11 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
+        $jwtGuard = Auth::guard('api');
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
+            'expires_in' => $jwtGuard->factory()->getTTL() * 60,
             'user' => auth()->user()
         ])->header('Authorization', $token);
     }

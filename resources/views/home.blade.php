@@ -27,17 +27,16 @@
     function logout(event) {
         event.preventDefault(); // Prevent the default form submission
         var token = localStorage.getItem('token'); // Assuming you stored the token as 'token'
-        fetch('/api/logout', {
+        fetch('/logout', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }else{
-                    localStorage.removeItem('token');
                     window.location.href = '/login';
                 }
             })

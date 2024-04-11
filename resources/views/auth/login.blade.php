@@ -84,7 +84,7 @@
 
         var formData = new FormData(event.target);
 
-        fetch('/api/login', {
+        fetch('/login', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -93,6 +93,7 @@
             })
             .then(response => {
                 if (response.ok) {
+                    console.log(response);
                     return response.json();
                 } else {
                     throw new Error('Login failed');
@@ -106,11 +107,6 @@
                 document.querySelector('.messages').innerHTML =
                     '<div class="alert alert-danger" role="alert">Login failed. Please check your credentials.</div>';
             });
-    }
-    window.onload = function() {
-        if (localStorage.getItem('token')) {
-            window.location.href = '/home'; // Redirect to home page if already logged in
-        }
     }
 </script>
 
