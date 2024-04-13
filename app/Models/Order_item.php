@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order_item extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'order_item';
 
@@ -40,5 +40,5 @@ class Order_item extends Model
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
+    //protected $dates = ['deleted_at'];
 }

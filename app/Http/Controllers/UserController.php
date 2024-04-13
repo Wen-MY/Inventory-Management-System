@@ -13,11 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //return all user 
-        $users = User::all(); //password will not visible
-        return view('user',compact($users));
+        $users = User::paginate(10); //password will not visible
+        return view('user', ['users' => $users]);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -27,13 +25,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        /*
         $request->validate([
             'username' => 'required|max:50',
             'password' => 'required|min:8',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required|in:admin,auditor,staff'
+        ], [
+            'email.unique' => 'This email address is already in use.'
         ]);
+*/
         try {
-            $user = User::create($request->all());
+            User::create([
+                'username' => $request->username,
+                'upassword' => $request->password,
+                'uemail' => $request->email,
+                'role' => $request->role,
+            ]);
             return response()->json(['message' => 'User created successfully.'], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create user.'], 500);
@@ -52,6 +60,7 @@ class UserController extends Controller
         $req->validate([
             'username' => 'required|max:50',
             'password' => 'required|min:8',
+            'email' => 'required|email|unique:users,email',
             'role' => 'required|in:admin,auditor,staff'
         ]);
         try{

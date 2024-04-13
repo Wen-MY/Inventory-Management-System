@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,9 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+Route::post('/changeUsername', [SettingController::class, 'changeUsername'])->name('changeUsername');
+Route::post('/changePassword', [SettingController::class, 'changePassword'])->name('changePassword');
+
+
+Route::post('/createUser', [UserController::class, 'store'])->name('createUser');
+Route::post('/editUser/{id}', [UserController::class, 'update'])->name('editUser');

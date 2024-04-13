@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Stock Management System</title>
 
-	<title>Stock Management System</title>
+    <style>
+        .btn-link {
+            margin-top: 150px;
+        }
+    </style>
 
-	<!-- bootstrap -->
-	<link rel="stylesheet" href="{{ asset('assests/bootstrap/css/bootstrap.min.css') }}">
-	<!-- bootstrap theme-->
-	<link rel="stylesheet" href="{{ asset('assests/bootstrap/css/bootstrap-theme.min.css') }}">
-	<!-- font awesome -->
-	<link rel="stylesheet" href="{{ asset('assests/font-awesome/css/font-awesome.min.css') }}">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
 
-  <!-- custom css -->
-  <link rel="stylesheet" href="{{ asset('custom/css/custom.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
-	<!-- DataTables -->
-  <link rel="stylesheet" href="{{ asset('assests/plugins/datatables/jquery.dataTables.min.css') }}">
+    <!-- jQuery -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
 
-  <!-- file input -->
-  <link rel="stylesheet" href="{{ asset('assests/plugins/fileinput/css/fileinput.min.css') }}">
-
-  <!-- jquery -->
-	<script src="{{ asset('assests/jquery/jquery.min.js') }}"></script>
-  <!-- jquery ui -->  
-  <link rel="stylesheet" href="{{ asset('assests/jquery-ui/jquery-ui.min.css') }}">
-  <script src="{{ asset('assests/jquery-ui/jquery-ui.min.js') }}"></script>
-
-  <!-- bootstrap js -->
-	<script src="{{ asset('assests/bootstrap/js/bootstrap.min.js') }}"></script>
-
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 </head>
 <body>
 
@@ -55,13 +53,13 @@
       <ul class="nav navbar-nav navbar-right">        
 
       	<li id="navDashboard"><a href="{{ url('/') }}"><i class="glyphicon glyphicon-list-alt"></i>  Dashboard</a></li>        
-        @if(isset(session('userId')) && session('userId')==1)
+        @if((session()->has('user') && session('user.id')==1))
         <li id="navBrand"><a href="{{ url('/brand') }}"><i class="glyphicon glyphicon-btc"></i>  Brand</a></li>        
 		@endif
-		@if(isset(session('userId')) && session('userId')==1)
+		@if((session()->has('user') && session('user.id')==1))
         <li id="navCategories"><a href="{{ url('/categories') }}"> <i class="glyphicon glyphicon-th-list"></i> Category</a></li>        
 		@endif
-		@if(isset(session('userId')) && session('userId')==1)
+		@if((session()->has('user') && session('user.id')==1))
         <li id="navProduct"><a href="{{ url('/product') }}"> <i class="glyphicon glyphicon-ruble"></i> Product </a></li> 
 		@endif
 		
@@ -73,16 +71,16 @@
           </ul>
         </li> 
 		
-		@if(isset(session('userId')) && session('userId')==1)
+		@if((session()->has('user') && session('user.id')==1))
         <li id="navReport"><a href="{{ url('/report') }}"> <i class="glyphicon glyphicon-check"></i> Report </a></li>
 		@endif 
-    @if(isset(session('userId')) && session('userId')==1)
+    @if((session()->has('user') && session('user.id')==1))
         <li id="importbrand"><a href="{{ url('/importbrand') }}"> <i class="glyphicon glyphicon-check"></i> Import Brand </a></li>
 		@endif   
         <li class="dropdown" id="navSetting">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-user"></i> <span class="caret"></span></a>
           <ul class="dropdown-menu">    
-			@if(isset(session('userId')) && session('userId')==1)
+			@if((session()->has('user') && session('user.id')==1))
             <li id="topNavSetting"><a href="{{ url('/setting') }}"> <i class="glyphicon glyphicon-wrench"></i> Setting</a></li>
             <li id="topNavUser"><a href="{{ url('/user') }}"> <i class="glyphicon glyphicon-wrench"></i> Add User</a></li>
 @endif              

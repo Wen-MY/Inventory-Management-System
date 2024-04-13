@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public $timestamps = true;
 
@@ -36,7 +36,7 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
+    //protected $dates = ['deleted_at'];
 
     public function getOrderItem(){
         return $this->hasMany('App\Models\Order_item');

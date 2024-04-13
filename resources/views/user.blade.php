@@ -1,5 +1,5 @@
-@php require_once 'php_action/db_connect.php'; @endphp
 <x-header />
+
 
 <div class="row">
     <div class="col-md-12">
@@ -27,6 +27,38 @@
                             <th style="width:15%;">Options</th>
                         </tr>
                     </thead>
+                    <tbody>
+                    @foreach ($users as $user)
+                        <tr>
+                            <td>{{ $user->username }}</td>
+                            <td>
+                                <!-- Dropdown button for actions -->
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <!-- Edit user option -->
+                                        <li><a type="button" data-toggle="modal" id="editUserModalBtn"
+                                                data-target="#editUserModal"
+                                                onclick="showEditUser({{ $user->id }})">
+                                                <i class="glyphicon glyphicon-edit"></i> Edit
+                                            </a>
+                                        </li>
+                                        <!-- Remove user option -->
+                                        <li><a type="button" data-toggle="modal" data-target="#removeUserModal"
+                                                id="removeUserModalBtn"
+                                                onclick="removeUser({{ $user->id }})">
+                                                <i class="glyphicon glyphicon-trash"></i> Remove
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
                 </table>
                 <!-- /table -->
             </div>
@@ -43,6 +75,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" id="submitUserForm" action="{{ route('createUser') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add User</h4>
@@ -73,6 +106,12 @@
                         </div>
                     </div>
                     <!-- /form-group-->
+                    <div class="form-group">
+                        <label for="role" class="col-sm-3 control-label">Role: </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="role" placeholder="Role" name="role" autocomplete="off">
+                        </div>
+                    </div>
                 </div>
                 <!-- /modal-body -->
 
@@ -113,7 +152,8 @@
                     <div class="tab-content">
                         <!-- product image -->
                         <div role="tabpanel" class="tab-pane active" id="userInfo">
-                            <form class="form-horizontal" id="editUserForm" action="{{ route('editUser') }}" method="POST">
+                            <form class="form-horizontal" id="editUserForm" action="{{ route('editUser', ['id' => $user->id]) }}" method="POST">
+                                @csrf
                                 <br />
                                 <div id="edit-user-messages"></div>
                                 <div class="form-group">
@@ -171,7 +211,4 @@
 </div><!-- /.modal -->
 <!-- /categories brand -->
 
-
-
-<script src="{{ asset('custom/js/user.js') }}"></script>
 <x-footer />
