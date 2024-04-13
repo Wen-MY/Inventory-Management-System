@@ -102,7 +102,7 @@ class BrandController extends Controller
     {
         try {
             $brand = Brand::findOrFail($id);
-            $brand->forceDelete(); 
+            $brand->delete(); 
             return response()->json(['message' => 'Brand deleted successfully.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to delete brand.'], 500);

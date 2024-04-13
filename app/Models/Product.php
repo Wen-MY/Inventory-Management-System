@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use HasFactory, SoftDeletes;
-
-    public $timestamps = false;
-
     protected $fillable = [
         'name', 
         'image', 
@@ -28,7 +25,6 @@ class Product extends Model
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
 
     public function brand()
     {

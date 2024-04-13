@@ -312,9 +312,8 @@
                                         <select type="text" class="form-control" id="editCategoryName"
                                             name="editCategoryName">
                                             <option value="">~~SELECT~~</option>
-                                            @foreach ($categories as $caterogy)
-                                                <option value="{{ $category->id }}"
-                                                    @if ($category->id == $product->category_id) selected @endif>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}" selected="{{$category->id == $product->category_id}}">
                                                     {{ $category->name }}</option>
                                             @endforeach
                                         </select>
@@ -327,7 +326,7 @@
                                     <div class="col-sm-8">
                                         <select class="form-control" id="editProductStatus" name="editProductStatus">
                                             <option value="">~~SELECT~~</option>
-                                            <option value="1" @if ($product->status == 1) selected @endif>
+                                            <option value="1" {{@if ($product->status == 1) selected @endif}}>
                                                 Available</option>
                                             <option value="2" @if ($product->status == 2) selected @endif>
                                                 Not Available</option>

@@ -10,8 +10,6 @@ class Order extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public $timestamps = true;
-
     protected $fillable = [
         'date', 
         'client_name', 
@@ -36,7 +34,6 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
 
     public function getOrderItem(){
         return $this->hasMany('App\Models\Order_item');

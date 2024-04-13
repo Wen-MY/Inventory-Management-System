@@ -17,8 +17,7 @@ class Order_item extends Model
      *
      * @var array<int, string>
      */
-    public $timestamps = true;
-    
+
     protected $fillable = [
         'order_id',
         'product_id',
@@ -34,11 +33,9 @@ class Order_item extends Model
     public function product(){
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
-
     /**
      * The attributes that should be mutated to dates.
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
 }

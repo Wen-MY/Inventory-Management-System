@@ -15,10 +15,9 @@ class Category extends Model
      *
      * @var array<int, string>
      */
-    public $timestamps = true;
-
     protected $fillable = [
         'name',
+        'active',
         'status'
     ];
 
@@ -27,6 +26,5 @@ class Category extends Model
      *
      * @var array<int, string>
      */
-    protected $dates = ['deleted_at'];
 }
 

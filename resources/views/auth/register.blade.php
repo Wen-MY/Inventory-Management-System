@@ -131,11 +131,6 @@
                 console.error('Error:', error);
             });
     }
-    window.onload = function() {
-        if (localStorage.getItem('token')) {
-            window.location.href = '/home'; // Redirect to home page if already logged in
-        }
-    }
 </script>
 
 </html>

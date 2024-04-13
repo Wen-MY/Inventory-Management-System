@@ -208,7 +208,7 @@
 </div>
 <!-- /remove brand -->
 
-<script src="{{ asset('js/brands.js') }}"></script>
+<script src="{{ asset('js/brand.js') }}"></script>
 
 <script>
     function setBrandId(brandId) {
