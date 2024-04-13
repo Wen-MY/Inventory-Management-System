@@ -7,6 +7,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,18 @@ Route::post('/create-brands', [BrandController::class, 'store']);
 Route::get('/get-brands/{id}', [BrandController::class, 'show']);
 Route::post('/edit-brand/{id}', [BrandController::class, 'update']);
 Route::delete('/delete-brands/{id}', [BrandController::class, 'destroy']);
+//product
+Route::post('/create-product', [ProductController::class, 'store']);
+Route::get('/get-product/{id}', [ProductController::class, 'show']);
+Route::post('/update-product-image/{id}', [ProductController::class, 'updateProductImage']);
+Route::post('/update-product/{id}', [ProductController::class, 'update']);
+Route::post('/delete-product/{id}', [ProductController::class, 'destroy']);
 
+//manage order
+Route::get('/get-order/{id}', [OrderController::class, 'show']);
+Route::post('/update-order/{id}', [OrderController::class, 'update']);
+Route::post('/delete-order/{id}', [OrderController::class, 'destroy']);
 
-
+//report
+Route::post('/report', [ReportController::class, 'generateReport']);
+Route::post('/generate-report', [ReportController::class, 'generateReport']);

@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/brand', [BrandController::class, 'index'])->name('brand');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/orders', [OrderController::class, 'index'])->name('order');
     Route::get('/product', [ProductController::class, 'index'])->name('product');
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
