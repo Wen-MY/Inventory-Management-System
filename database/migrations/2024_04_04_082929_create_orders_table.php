@@ -32,6 +32,7 @@ class CreateOrdersTable extends Migration
             $table->integer('order_status')->default(0);
             $table->bigInteger('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

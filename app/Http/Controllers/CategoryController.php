@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-   /**
+    /**
      * Display a view of index page categories.
      *
      * @return \Illuminate\Contracts\View\View
@@ -26,14 +26,22 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'active' => 'required|integer|in:0,1', 
-            'status' => 'required|integer|in:0,1', 
-        ]);
+        
+        // $request->validate([
+
+        //     'name' => 'required|string|max:255', 
+
+        //     'status' => 'required|integer|in:0,1', 
+
+        // ]);
+
         try {
-            $category = Category::create($request->all());
-            return response()->json(['message' => 'Category created successfully.'], 201);
+            Category::create([
+                'name' => $request->categoriesName,
+                'status'=> $request->categoriesStatus,
+            ]);
+            
+            return redirect('categories')->with('success', 'Category created successfully.');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create category.'], 500);
         }
@@ -63,19 +71,25 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  $id
      * @return \Illuminate\Http\Response
-     * 
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'active' => 'required|integer|in:0,1', // Assuming 'active' can be 0 or 1
-            'status' => 'required|integer|in:0,1', // Assuming 'status' can be 0 or 1
-        ]);
+        // $request->validate([
+
+        //     'name' => 'required|string|max:255',
+
+        //     'status' => 'required|integer|in:0,1', // Assuming 'status' can be 0 or 1
+
+        // ]);
+
         try {
             $category = Category::findOrFail($id);
-            $category->update($request->all());
-            return response()->json(['message' => 'Category updated successfully.'], 200);
+            $category->update([
+                'name' => $request->editCategoriesName,
+                'status' => $request->editCategoriesStatus,
+            ]);
+
+            return redirect('categories')->with('success', 'Category updated successfully.');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update category.'], 500);
         }
@@ -84,20 +98,22 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $category
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        try{
+        try {
             $category = Category::findOrFail($id);
-            $category->deleteOrFail();
+            $category->delete();
             return response()->json(['message' => 'Category deleted successfully.'], 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to delete category.'], 500);
         }
     }
-        /**
+    
+    
+    /**
      * Soft delete the specified resource from storage.
      *
      * @param  int  $id

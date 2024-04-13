@@ -22,6 +22,7 @@ class CreateOrderItemTable extends Migration
             $table->string('total',255);
             $table->integer('status')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

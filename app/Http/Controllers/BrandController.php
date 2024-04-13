@@ -26,14 +26,19 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'active' => 'required|integer|in:0,1', 
-            'status' => 'required|integer|in:0,1', 
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255', 
+        //     'status' => 'required|integer|in:0,1', 
+        // ]);
+
         try {
-            $brand = Brand::create($request->all());
-            return response()->json(['message' => 'Brand created successfully.'], 201);
+
+            Brand::create([
+                'name' => $request->brandName,
+                'status'=> $request->brandStatus,
+            ]);
+
+            return redirect('brand')->with('success', 'Brand created successfully.');
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create brand.'], 500);
         }
@@ -67,15 +72,20 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'active' => 'required|integer|in:0,1', // Assuming 'active' can be 0 or 1
-            'status' => 'required|integer|in:0,1', // Assuming 'status' can be 0 or 1
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'status' => 'required|integer|in:0,1', // Assuming 'status' can be 0 or 1
+        // ]);
+        
         try {
-            $brand = Brand::findOrFail($id);
-            $brand->update($request->all());
-            return response()->json(['message' => 'Brand updated successfully.'], 200);
+            $brand= Brand::findOrFail($id);
+            $brand->update([
+                'name' => $request->editBrandName,
+                'status' => $request->editBrandStatus,
+            ]);
+
+            return redirect('brand')->with('success', 'Brand updated successfully.');
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update brand.'], 500);
         }
@@ -90,11 +100,11 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        try{
+        try {
             $brand = Brand::findOrFail($id);
-            $brand->deleteOrFail();
+            $brand->delete(); 
             return response()->json(['message' => 'Brand deleted successfully.'], 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to delete brand.'], 500);
         }
     }

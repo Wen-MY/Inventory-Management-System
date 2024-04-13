@@ -67,13 +67,13 @@ class AuthController extends Controller
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout()
     {
         auth()->logout();
         Session::forget('user');
-        return response()->json(['message' => 'User successfully signed out']);
+        return redirect('/');
     }
 
     /**
