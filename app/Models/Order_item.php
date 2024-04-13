@@ -28,11 +28,11 @@ class Order_item extends Model
         'status'
     ];
     
-    public function getOrder(){
+    public function order(){
         return $this->belongsTo('App\Models\Order');
     }
-    public function getProduct(){
-        return $this->hasOne('App\Models\Product');
+    public function product(){
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
     /**

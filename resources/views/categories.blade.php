@@ -18,7 +18,9 @@
                 <div class="remove-messages"></div>
 
                 <div class="div-action pull pull-right" style="padding-bottom:20px;">
-                    <button class="btn btn-default button1" data-toggle="modal" id="addCategoriesModalBtn" data-target="#addCategoriesModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Categories </button>
+                    <button class="btn btn-default button1" data-toggle="modal" id="addCategoriesModalBtn"
+                        data-target="#addCategoriesModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Categories
+                    </button>
                 </div>
                 <!-- /div-action -->
 
@@ -47,9 +49,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form class="form-horizontal" id="submitCategoriesForm" action="{{ url('createCategories') }}" method="POST">
+            <form class="form-horizontal" id="submitCategoriesForm" action="{{ url('createCategories') }}"
+                method="POST">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add Categories</h4>
                 </div>
                 <div class="modal-body">
@@ -60,7 +64,8 @@
                         <label for="categoriesName" class="col-sm-4 control-label">Categories Name: </label>
                         <label class="col-sm-1 control-label">: </label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control" id="categoriesName" placeholder="Categories Name" name="categoriesName" autocomplete="off">
+                            <input type="text" class="form-control" id="categoriesName" placeholder="Categories Name"
+                                name="categoriesName" autocomplete="off">
                         </div>
                     </div>
                     <!-- /form-group-->
@@ -80,9 +85,12 @@
                 <!-- /modal-body -->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                            class="glyphicon glyphicon-remove-sign"></i> Close</button>
 
-                    <button type="submit" class="btn btn-primary" id="createCategoriesBtn" data-loading-text="Loading..." autocomplete="off"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
+                    <button type="submit" class="btn btn-primary" id="createCategoriesBtn"
+                        data-loading-text="Loading..." autocomplete="off"> <i class="glyphicon glyphicon-ok-sign"></i>
+                        Save Changes</button>
                 </div>
                 <!-- /modal-footer -->
             </form>
@@ -101,14 +109,16 @@
 
             <form class="form-horizontal" id="editCategoriesForm" action="{{ url('editCategories') }}" method="POST">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-edit"></i> Edit Brand</h4>
                 </div>
                 <div class="modal-body">
 
                     <div id="edit-categories-messages"></div>
 
-                    <div class="modal-loading div-hide" style="width:50px; margin:auto;padding-top:50px; padding-bottom:50px;">
+                    <div class="modal-loading div-hide"
+                        style="width:50px; margin:auto;padding-top:50px; padding-bottom:50px;">
                         <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>
@@ -118,7 +128,8 @@
                             <label for="editCategoriesName" class="col-sm-4 control-label">Categories Name: </label>
                             <label class="col-sm-1 control-label">: </label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="editCategoriesName" placeholder="Categories Name" name="editCategoriesName" autocomplete="off">
+                                <input type="text" class="form-control" id="editCategoriesName"
+                                    placeholder="Categories Name" name="editCategoriesName" autocomplete="off">
                             </div>
                         </div>
                         <!-- /form-group-->
@@ -141,9 +152,12 @@
                 <!-- /modal-body -->
 
                 <div class="modal-footer editCategoriesFooter">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                            class="glyphicon glyphicon-remove-sign"></i> Close</button>
 
-                    <button type="submit" class="btn btn-success" id="editCategoriesBtn" data-loading-text="Loading..." autocomplete="off"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
+                    <button type="submit" class="btn btn-success" id="editCategoriesBtn"
+                        data-loading-text="Loading..." autocomplete="off"> <i
+                            class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
                 </div>
                 <!-- /modal-footer -->
             </form>
@@ -160,15 +174,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><i class="glyphicon glyphicon-trash"></i> Remove Brand</h4>
             </div>
             <div class="modal-body">
                 <p>Do you really want to remove ?</p>
             </div>
             <div class="modal-footer removeCategoriesFooter">
-                <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Close</button>
-                <button type="button" class="btn btn-primary" id="removeCategoriesBtn" data-loading-text="Loading..."> <i class="glyphicon glyphicon-ok-sign"></i> Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                        class="glyphicon glyphicon-remove-sign"></i> Close</button>
+                <button type="button" class="btn btn-primary" id="removeCategoriesBtn"
+                    data-loading-text="Loading..."> <i class="glyphicon glyphicon-ok-sign"></i> Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -177,6 +194,6 @@
 </div>
 <!-- /categories brand -->
 
-<script src="{{ asset('custom/js/categories.js') }}"></script>
+<script src="{{ asset('js/categories.js') }}"></script>
 
 <x-footer />

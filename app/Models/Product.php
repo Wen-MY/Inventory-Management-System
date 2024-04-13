@@ -10,7 +10,7 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'name', 
@@ -29,4 +29,15 @@ class Product extends Model
      * @var array<int, string>
      */
     protected $dates = ['deleted_at'];
+
+    public function brand()
+    {
+        return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
 }
