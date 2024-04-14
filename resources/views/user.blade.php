@@ -1,6 +1,5 @@
 <x-header />
 
-
 <div class="row">
     <div class="col-md-12">
         <ol class="breadcrumb">
@@ -29,6 +28,7 @@
                     </thead>
                     <tbody>
                     @foreach ($users as $user)
+                    @if($user->id !== session("user.id"))
                         <tr>
                             <td>{{ $user->username }}</td>
                             <td>
@@ -49,7 +49,7 @@
                                         <!-- Remove user option -->
                                         <li><a type="button" data-toggle="modal" data-target="#removeUserModal"
                                                 id="removeUserModalBtn"
-                                                onclick="removeUser({{ $user->id }})">
+                                                onclick="setUserId({{ $user->id }})">
                                                 <i class="glyphicon glyphicon-trash"></i> Remove
                                             </a>
                                         </li>
@@ -57,6 +57,7 @@
                                 </div>
                             </td>
                         </tr>
+                    @endif
                     @endforeach
                     </tbody>
                 </table>
@@ -84,32 +85,37 @@
                 <div class="modal-body" style="max-height:450px; overflow:auto;">
                     <div id="add-user-messages"></div>
                     <div class="form-group">
-                        <label for="userName" class="col-sm-3 control-label">User Name: </label>
+                        <label for="username" class="col-sm-3 control-label">User Name: </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="userName" placeholder="User Name" name="userName" autocomplete="off">
+                            <input type="text" class="form-control" id="username" placeholder="User Name" name="username" autocomplete="off">
                         </div>
                     </div>
                     <!-- /form-group-->
 
                     <div class="form-group">
-                        <label for="upassword" class="col-sm-3 control-label">Password: </label>
+                        <label for="password" class="col-sm-3 control-label">Password: </label>
                         <div class="col-sm-8">
-                            <input type="password" class="form-control" id="upassword" placeholder="Password" name="upassword" autocomplete="off">
+                            <input type="password" class="form-control" id="password" placeholder="Password" name="password" autocomplete="off">
                         </div>
                     </div>
                     <!-- /form-group-->
 
                     <div class="form-group">
-                        <label for="uemail" class="col-sm-3 control-label">Email: </label>
+                        <label for="email" class="col-sm-3 control-label">Email: </label>
                         <div class="col-sm-8">
-                            <input type="email" class="form-control" id="uemail" placeholder="Email" name="uemail" autocomplete="off">
+                            <input type="email" class="form-control" id="email" placeholder="Email" name="email" autocomplete="off">
                         </div>
                     </div>
                     <!-- /form-group-->
                     <div class="form-group">
                         <label for="role" class="col-sm-3 control-label">Role: </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="role" placeholder="Role" name="role" autocomplete="off">
+                        <select class="form-control" id="role" name="role">
+                            <option value="">~~SELECT~~</option>
+                            <option value="staff" >Staff</option>
+                            <option value="admin" >Admin</option>
+                            <option value="audit" >Audit</option>
+                        </select>
                         </div>
                     </div>
                 </div>
@@ -130,7 +136,7 @@
 <!-- /add categories -->
 
 
-<!-- edit categories brand -->
+<!-- edit user -->
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -152,21 +158,22 @@
                     <div class="tab-content">
                         <!-- product image -->
                         <div role="tabpanel" class="tab-pane active" id="userInfo">
-                            <form class="form-horizontal" id="editUserForm" action="{{ route('editUser', ['id' => $user->id]) }}" method="POST">
+                            <form class="form-horizontal" id="editUserForm" onsubmit="updateUser(event)">
                                 @csrf
                                 <br />
-                                <div id="edit-user-messages"></div>
+                                <input type="hidden" class="form-control" id="editUserId"
+                                        placeholder="User Name" name="editUserId">
                                 <div class="form-group">
                                     <label for="edituserName" class="col-sm-3 control-label">User Name: </label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="edituserName" placeholder="User Name" name="edituserName" autocomplete="off">
+                                        <input type="text" class="form-control" id="editUsername" placeholder="User Name" name="username" autocomplete="off">
                                     </div>
                                 </div>
                                 <!-- /form-group-->
                                 <div class="form-group">
                                     <label for="editPassword" class="col-sm-3 control-label">Password: </label>
                                     <div class="col-sm-8">
-                                        <input type="password" class="form-control" id="editPassword" placeholder="Password" name="editPassword" autocomplete="off">
+                                        <input type="password" class="form-control" id="editPassword" placeholder="Password" name="password" autocomplete="off">
                                     </div>
                                 </div>
                                 <!-- /form-group-->
@@ -199,16 +206,88 @@
                 <h4 class="modal-title"><i class="glyphicon glyphicon-trash"></i> Remove User</h4>
             </div>
             <div class="modal-body">
-                <div class="removeUserMessages"></div>
+                <input type="hidden" id="userIdToDelete" name="userIdToDelete">
                 <p>Do you really want to remove ?</p>
             </div>
             <div class="modal-footer removeProductFooter">
                 <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Close</button>
-                <button type="button" class="btn btn-primary" id="removeProductBtn" data-loading-text="Loading..."> <i class="glyphicon glyphicon-ok-sign"></i> Save changes</button>
+                <button type="button" class="btn btn-primary" id="removeProductBtn" data-loading-text="Loading..." onclick="removeUser(document.getElementById('userIdToDelete').value)"> <i class="glyphicon glyphicon-ok-sign"></i> Save changes</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- /categories brand -->
+<script>
+    function showEditUser(id) {
+        event.preventDefault();
+
+        fetch('api/get-user/' + id, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to fetch product details');
+                }
+            })
+            .then(data => {
+                var user = data.user;
+                document.getElementById('editUserId').value = user.id;
+                document.getElementById('editUsername').value = user.username;
+                document.getElementById('editPassword').value = user.password;
+                $('#editUserModal').modal('show');
+            })
+            .catch(error => {
+                console.error('Failed to fetch user details:', error);
+            });
+    }
+
+    function updateUser(event) {
+        event.preventDefault();
+        var formData = new FormData(event.target);
+
+        fetch('api/update-user/' + document.getElementById('editUserId').value, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to update user');
+                }
+            })
+            .then(data => {
+                window.location.href = '/user';
+            })
+            .catch(error => {
+                console.error('Failed to update user:', error);
+            });
+    }
+    function setUserId(userId) {
+        document.getElementById('userIdToDelete').value = userId;
+    }
+    function removeUser(id) {
+        event.preventDefault();
+
+        fetch('api/delete-user/' + id, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to delete product');
+                }
+            })
+            .then(data => {
+                window.location.href = '/user';
+            })
+            .catch(error => {
+                console.error('Failed to delete user:', error);
+            });
+    }
+    </script>
 
 <x-footer />

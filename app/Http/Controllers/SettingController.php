@@ -33,12 +33,13 @@ class SettingController extends Controller
 
     public function changePassword(Request $request)
     {
+        /*
         $request->validate([
             'user_id' => 'required', // Assuming user_id is sent in the request
             'password' => 'required|min:8',
             'npassword' => 'required|min:8|confirmed',
         ]);
-
+        */
         $user = User::find($request->input('user_id'));
         
         if (!$user) {

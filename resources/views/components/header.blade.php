@@ -4,8 +4,6 @@
 <head>
     <title>Stock Management System</title>
 
-    <title>Stock Management System</title>
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <!-- Bootstrap theme -->
@@ -25,8 +23,6 @@
     <!-- Bootstrap JS -->
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 </head>
 
 <body>

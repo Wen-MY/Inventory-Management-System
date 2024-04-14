@@ -16,6 +16,7 @@ class UserController extends Controller
         $users = User::paginate(10); //password will not visible
         return view('user', ['users' => $users]);
     }
+    //if(session('user.id'))
 
     /**
      * Store a newly created resource in storage.
@@ -25,7 +26,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        /*
+        
         $request->validate([
             'username' => 'required|max:50',
             'password' => 'required|min:8',
@@ -34,12 +35,12 @@ class UserController extends Controller
         ], [
             'email.unique' => 'This email address is already in use.'
         ]);
-*/
+
         try {
             User::create([
                 'username' => $request->username,
-                'upassword' => $request->password,
-                'uemail' => $request->email,
+                'password' => bcrypt($request->password),
+                'email' => $request->email,
                 'role' => $request->role,
             ]);
             return response()->json(['message' => 'User created successfully.'], 201);
@@ -57,12 +58,14 @@ class UserController extends Controller
      */
     public function update(Request $req, $id)
     {
+        /*
         $req->validate([
             'username' => 'required|max:50',
             'password' => 'required|min:8',
             'email' => 'required|email|unique:users,email',
             'role' => 'required|in:admin,auditor,staff'
         ]);
+        */
         try{
             $user = User::findOrFail($id);
             
@@ -72,7 +75,29 @@ class UserController extends Controller
             return response()->json(['message' => 'Failed to update user.'], 500);
         }
     }
+    /*
+    public function update(Request $request, $id)
+    {
+        try {
+            $product = Product::findOrFail($id);
 
+            // Update the attributes
+            $product->name = $request->input('editProductName');
+            $product->quantity = $request->input('editQuantity');
+            $product->rate = $request->input('editRate');
+            $product->brand_id = $request->input('editBrandName');
+            $product->category_id = $request->input('editCategoryName');
+            $product->status = $request->input('editProductStatus');
+
+            // Save the changes
+            $product->save();
+
+            return response()->json(['message' => 'Product updated successfully.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to update product.'], 500);
+        }
+    }
+*/
     /**
      * Remove the specified resource from storage.
      *
@@ -87,6 +112,17 @@ class UserController extends Controller
             return response()->json(['message' => 'User deleted successfully.'], 200);
         }catch(\Exception $e){
             return response()->json(['message' => 'Failed to delete user.'], 500);
+        }
+    }
+    public function show($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json(['message' => 'User retrieved successfully.', 'user' => $user], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'User not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve user.'], 500);
         }
     }
 

@@ -77,6 +77,17 @@ class ProductController extends Controller
         }
     }
 
+    public function showAll(){
+        try {
+            $product = Product::all();
+            return response()->json(['message' => 'Products retrieved successfully.', 'product' => $product], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Products not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve products.'], 500);
+        }
+    }
+
     public function updateProductImage(Request $request, $id)
     {
         // $request->validate([

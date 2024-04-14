@@ -22,7 +22,7 @@
     <!-- Bootstrap JS -->
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 
-    <script src="{{ asset('js/setting.js') }}"></script>
+    <!--<script src="{{ asset('js/setting.js') }}"></script>-->
 </head>
 
 <div class="row">
@@ -53,7 +53,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <input type="hidden" name="user_id" id="user_id" value="{{ $user->user_id }}" />
+                                <input type="hidden" name="user_id" id="user_id" value="{{ session('user.id') }}" />
                                 <button type="submit" class="btn btn-success" data-loading-text="Loading..." id="changeUsernameBtn"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes </button>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <input type="hidden" name="user_id" id="user_id" value="{{ $user->user_id }}" />
+                                <input type="hidden" name="user_id" id="user_id" value="{{ session('user.id') }}" />
                                 <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes </button>
                             </div>
                         </div>
