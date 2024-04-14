@@ -1,12 +1,29 @@
 <x-header />
 
-@php
-$user_id = session('userId');
-$sql = "SELECT * FROM users WHERE user_id = $user_id";
-$query = $connect->query($sql);
-$result = $query->fetch_assoc();
-$connect->close();
-@endphp
+<head>
+    <title>Stock Management System</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
+    <!-- jQuery -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+    <!--<script src="{{ asset('js/setting.js') }}"></script>-->
+</head>
 
 <div class="row">
     <div class="col-md-12">
@@ -26,17 +43,17 @@ $connect->close();
                         <legend>Change Username</legend>
 
                         <div class="changeUsenrameMessages"></div>
-
+                        
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label">Username</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Usename" value="{{ $result['username'] }}"/>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ $user->username }}"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <input type="hidden" name="user_id" id="user_id" value="{{ $result['user_id'] }}" />
+                                <input type="hidden" name="user_id" id="user_id" value="{{ session('user.id') }}" />
                                 <button type="submit" class="btn btn-success" data-loading-text="Loading..." id="changeUsernameBtn"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes </button>
                             </div>
                         </div>
@@ -72,7 +89,7 @@ $connect->close();
 
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <input type="hidden" name="user_id" id="user_id" value="{{ $result['user_id'] }}" />
+                                <input type="hidden" name="user_id" id="user_id" value="{{ session('user.id') }}" />
                                 <button type="submit" class="btn btn-primary"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes </button>
                             </div>
                         </div>
@@ -82,7 +99,5 @@ $connect->close();
         </div> <!-- /panel -->
     </div> <!-- /col-md-12 -->
 </div> <!-- /row-->
-
-<script src="{{ asset('custom/js/setting.js') }}"></script>
 
 <x-footer />

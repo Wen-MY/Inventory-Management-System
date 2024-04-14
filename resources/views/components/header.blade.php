@@ -2,7 +2,6 @@
 <html>
 
 <head>
-
     <title>Stock Management System</title>
 
     <!-- Bootstrap -->

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
@@ -34,6 +36,17 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
+
+Route::post('/changeUsername', [SettingController::class, 'changeUsername'])->name('changeUsername');
+Route::post('/changePassword', [SettingController::class, 'changePassword'])->name('changePassword');
+
+
+Route::post('/createUser', [UserController::class, 'store'])->name('createUser');
+Route::get('/get-user/{id}', [UserController::class, 'show']);
+Route::post('/update-user/{id}', [UserController::class, 'update']);
+Route::post('/delete-user/{id}', [UserController::class, 'destroy']);
+Route::get('/get-product', [ProductController::class, 'showAll']);
+Route::post('/create-order', [OrderController::class, 'store']);
 
 Route::post('/create-categories', [CategoryController::class, 'store']);
 Route::get('/get-categories/{id}', [CategoryController::class, 'show']);

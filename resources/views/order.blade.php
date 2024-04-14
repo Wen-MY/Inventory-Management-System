@@ -147,12 +147,19 @@
     function updateRate(select) {
         var selectedOption = select.options[select.selectedIndex];
         var rateField = select.closest('tr').querySelector("input[name='rate[]']");
+        var hiddenRateField = select.closest('tr').querySelector("input[name='rateValue[]']");
+        var availableQuantityField = select.closest('tr').querySelector("input[name='availableQuantity[]']");
 
         if (selectedOption.value !== '') {
             var rate = selectedOption.getAttribute('data-rate');
+            var availableQuantity = selectedOption.getAttribute('data-availableQuantity');
             rateField.value = rate;
+            hiddenRateField.value = rate;
+            availableQuantityField.value = availableQuantity;
         } else {
             rateField.value = '';
+            hiddenRateField.value = '';
+            availableQuantityField.value = '';
         }
     }
 
@@ -183,6 +190,78 @@
 
     var orderId = getUrlParameter('i');
     fetchOrderToUpdate(orderId);
+
+    function addRow() {
+    var table = document.getElementById("productTable").getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.rows.length);
+    var cell1 = newRow.insertCell(0);
+    var cell2 = newRow.insertCell(1);
+    var cell3 = newRow.insertCell(2);
+    var cell4 = newRow.insertCell(3);
+    var cell5 = newRow.insertCell(4);
+    var cell6 = newRow.insertCell(5);
+
+    cell1.innerHTML = `<div class="form-group">
+                            <select class="form-control" name="productName[]" onchange="updateRate(this)">
+                                <option value="">~~SELECT~~</option>
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}" data-rate="{{ $product->rate }}" data-availableQuantity="{{ $product->quantity }}">
+                                        {{ $product->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>`;
+    cell1.style.paddingLeft = "22px"; // Apply padding-left style
+    cell1.style.paddingRight= "20px";
+    cell2.innerHTML = `<input type="text" name="rate[]" id="rate[]" autocomplete="off" disabled="true" class="form-control" />
+                        <input type="hidden" name="rateValue[]" id="rateValue[]" autocomplete="off" class="form-control" />`;
+
+    cell3.innerHTML = ` <td style="padding-left:22px; padding-right:22px;">
+                            <input type="text" name="availableQuantity[]" id="availableQuantity[]" autocomplete="off" disabled="true" class="form-control" />
+                            <input type="hidden" name="availableQuantityValue[]" id="availableQuantityValue[]" autocomplete="off" class="form-control" />
+                        </td>`;
+
+    cell4.innerHTML = `<div class="form-group">
+                            <input type="number" name="quantity[]" id="quantity[]" onkeyup="getTotal(this)" autocomplete="off" class="form-control" min="1" />
+                        </div>`;
+    cell4.style.paddingLeft = "20px"; // Apply padding-left style
+    cell4.style.paddingRight = "25px"; // Apply padding-right style
+
+    cell5.innerHTML = `<div class="form-group">
+                            <input type="text" name="total[]" id="total[]" autocomplete="off" class="form-control" disabled="true" />
+                            <input type="hidden" name="totalValue[]" id="totalValue[]" autocomplete="off" class="form-control" />
+                        </div>`;
+    cell5.style.paddingLeft = "20px"; // Apply padding-left style
+}
+
+function createOrder(event) {
+    event.preventDefault();
+    var userId = {{ auth()->user()->id }};
+    var form = document.getElementById('createOrderForm');
+    
+    var formData = new FormData(form);
+    formData.append('user_id', userId);
+
+    fetch('api/create-order', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to submit form');
+        }
+    })
+    .then(data => {
+        console.log('Form submitted successfully:', data);
+    })
+    .catch(error => {
+        // Handle error
+        console.error('Error submitting form:', error);
+        // You can show an error message to the user here
+    });
+}
 </script>
 
 @if (request()->has('o') && request()->o == 'add')
@@ -227,17 +306,16 @@
         @endif
     </div>
 
-    <div class="panel-body">
-        @if (request()->has('o') && request()->o == 'add')
+    @if (request()->has('o') && request()->o == 'add')
             <div class="success-messages"></div>
 
-            <form class="form-horizontal" method="POST" action="{{ url('php_action/createOrder.php') }}"
-                id="createOrderForm">
+            <form class="form-horizontal" method="POST" onsubmit=createOrder(event) id="createOrderForm">
                 @csrf
                 <div class="form-group">
                     <label for="orderDate" class="col-sm-2 control-label">Order Date</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="orderDate" name="orderDate" autocomplete="off" />
+                        <input type="text" class="form-control" id="orderDate" name="orderDate"
+                            placeholder="Order Date" autocomplete="off" />
                     </div>
                 </div>
 
@@ -269,54 +347,42 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($productData as $product)
-                            <tr id="row{{ $loop->iteration }}">
-                                <td style="margin-left:20px;">
-                                    <div class="form-group">
-                                        <select class="form-control" name="productName[]"
-                                            id="productName{{ $loop->iteration }}"
-                                            onchange="getProductData({{ $loop->iteration }})">
-                                            <option value="">~~SELECT~~</option>
-                                            @foreach ($productData as $row)
-                                                <option value="{{ $row->product_id }}"
-                                                    id="changeProduct{{ $row->product_id }}">{{ $row->product_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </td>
-                                <td style="padding-left:20px;">
-                                    <input type="text" name="rate[]" id="rate{{ $loop->iteration }}"
-                                        autocomplete="off" disabled="true" class="form-control" />
-                                    <input type="hidden" name="rateValue[]" id="rateValue{{ $loop->iteration }}"
-                                        autocomplete="off" class="form-control" />
-                                </td>
-                                <td style="padding-left:20px;">
-                                    <div class="form-group">
-                                        <p id="available_quantity{{ $loop->iteration }}"></p>
-                                    </div>
-                                </td>
-                                <td style="padding-left:20px;">
-                                    <div class="form-group">
-                                        <input type="number" name="quantity[]" id="quantity{{ $loop->iteration }}"
-                                            onkeyup="getTotal({{ $loop->iteration }})" autocomplete="off"
-                                            class="form-control" min="1" />
-                                    </div>
-                                </td>
-                                <td style="padding-left:20px;">
-                                    <input type="text" name="total[]" id="total{{ $loop->iteration }}"
-                                        autocomplete="off" class="form-control" disabled="true" />
-                                    <input type="hidden" name="totalValue[]" id="totalValue{{ $loop->iteration }}"
-                                        autocomplete="off" class="form-control" />
-                                </td>
-                                <td>
-                                    <button class="btn btn-default removeProductRowBtn" type="button"
-                                        id="removeProductRowBtn"
-                                        onclick="removeProductRow({{ $loop->iteration }})"><i
-                                            class="glyphicon glyphicon-trash"></i></button>
-                                </td>
-                            </tr>
-                        @endforeach
+                        <tr>
+                        <td style="padding-left:22px; padding-right:20px;">
+                            <div class="form-group">
+                                <select class="form-control" name="productName[]" onchange="updateRate(this)">
+                                    <option value="">~~SELECT~~</option>
+                                    @foreach ($products as $product)
+                                        <option value="{{ $product->id }}" data-rate="{{ $product->rate }}" data-availableQuantity="{{ $product->quantity }}">
+                                            {{ $product->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" name="rate[]" id="rate[]" autocomplete="off" disabled="true" class="form-control" />
+                            <input type="hidden" name="rateValue[]" id="rateValue[]" autocomplete="off" class="form-control" />
+                        </td>
+                        <td>
+                            <input type="text" name="availableQuantity[]" id="availableQuantity[]" autocomplete="off" disabled="true" class="form-control" />
+                            <input type="hidden" name="availableQuantityValue[]" id="availableQuantityValue[]" autocomplete="off" class="form-control" />
+                        </td>
+                            <td style="padding-left:20px; padding-right:25px;">
+                                <div class="form-group">
+                                    <input type="number" name="quantity[]" id="quantity[]" onkeyup="getTotal(this)"
+                                        autocomplete="off" class="form-control" min="1" />
+                                </div>
+                            </td>
+                            <td style="padding-left:20px;">
+                                <div class="form-group">
+                                    <input type="text" name="total[]" id="total[]" autocomplete="off"
+                                        class="form-control" disabled="true" />
+                                    <input type="hidden" name="totalValue[]" id="totalValue[]" autocomplete="off"
+                                        class="form-control" />
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="col-md-6">
@@ -423,9 +489,9 @@
 
                 <div class="form-group submitButtonFooter">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn"
-                            data-loading-text="Loading..."> <i class="glyphicon glyphicon-plus-sign"></i> Add Row
-                        </button>
+                    <button type="button" class="btn btn-default" onclick="addRow()" id="addRowBtn" data-loading-text="Loading...">
+                        <i class="glyphicon glyphicon-plus-sign"></i> Add Row
+                    </button>
                         <button type="submit" id="createOrderBtn" data-loading-text="Loading..."
                             class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
                         <button type="reset" class="btn btn-default" onclick="resetOrderForm()"><i

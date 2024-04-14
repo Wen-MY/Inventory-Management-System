@@ -42,30 +42,58 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        /*
         $request->validate([
-            'date' => 'required|date',
-            'client_name' => 'required|string|max:255',
-            'client_contact' => 'required|string|max:255',
-            'sub_total' => 'required|numeric',
-            'vat' => 'required|numeric',
-            'total_amount' => 'required|numeric',
+            'orderDate' => 'required',
+            'clientName' => 'required|string|max:255',
+            'clientContact' => 'required|string|max:255',
+            'subTotalValue' => 'required|numeric',
+            'vatValue' => 'required|numeric',
+            'totalAmountValue' => 'required|numeric',
             'discount' => 'required|numeric',
-            'grand_total' => 'required|numeric',
+            'grandTotalValue' => 'required|numeric',
             'paid' => 'required|numeric',
-            'due' => 'required|numeric',
-            'payment_type' => 'required|integer',
-            'payment_status' => 'required|integer', 
-            'payment_place' => 'required|integer',
+            'dueValue' => 'required|numeric',
+            'paymentType' => 'required|integer',
+            'paymentStatus' => 'required|integer', 
+            'paymentPlace' => 'required|integer',
             'gstn' => 'nullable|string|max:255|regex:/^[0-9A-Za-z]+$/',
-            'order_status' => 'nullable|integer', 
-            'user_id' => 'required|integer',
         ]);
-        try {
-            $order = Order::create($request->all());
-            return response()->json(['message' => 'Order created successfully.'], 201);
+        */
+        try{
+            $order = new Order;
+            $orderDate = Carbon::createFromFormat('m/d/Y', $request->orderDate)->format('Y-m-d');
+            $order->date = $orderDate;
+            $order->client_name = $request->clientName;
+            $order->client_contact = $request->clientContact;
+            $order->sub_total = $request->subTotalValue;
+            $order->total_amount = $request->totalAmountValue;
+            $order->discount = $request->discount;
+            $order->grand_total = $request->grandTotalValue;
+            $order->vat = $request->vatValue;
+            $order->gstn = $request->gstn;
+            $order->paid = $request->paid;
+            $order->due = $request->dueValue;
+            $order->payment_type = $request->paymentType;
+            $order->payment_status = $request->paymentStatus;
+            $order->payment_place = $request->paymentPlace;
+            $order->user_id = $request->user_id;
+            $order->save();
+            $insertedId = $order->id;
+        
+            foreach ($request->productName as $index => $productName) {
+                $orderItem = new Order_item();
+                $orderItem->order_id = $insertedId;
+                $orderItem->product_id = $productName;
+                $orderItem->rate = $request->rateValue[$index];
+                $orderItem->quantity = $request->quantity[$index];
+                $orderItem->total = $request->totalValue[$index];
+                $orderItem->save();
+            }
+            return response()->json(['message' => 'Order created successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to create order.'], 500);
-        }
+            return response()->json(['error' => 'Failed to create order: ' . $e->getMessage()], 500);
+        }     
     }
 
     /**
