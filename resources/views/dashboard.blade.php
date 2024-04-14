@@ -1,5 +1,5 @@
 <x-header />
-
+<!--
 @php
     $sql = "SELECT * FROM product WHERE status = 1";
     $query = $connect->query($sql);
@@ -13,7 +13,6 @@
     while ($orderResult = $orderQuery->fetch_assoc()) {
         $totalRevenue += $orderResult['paid'];
     }
-
     $lowStockSql = "SELECT * FROM product WHERE quantity <= 3 AND status = 1";
     $lowStockQuery = $connect->query($lowStockSql);
     $countLowStock = $lowStockQuery->num_rows;
@@ -24,15 +23,15 @@
 
     $connect->close();
 @endphp
-
+-->
 <style type="text/css">
     .ui-datepicker-calendar {
         display: none;
     }
 </style>
 
-<link rel="stylesheet" href="{{ asset('assets/plugins/fullcalendar/fullcalendar.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/plugins/fullcalendar/fullcalendar.print.css') }}" media="print">
+<link rel="stylesheet" href="{{ asset('plugins/fullcalendar/fullcalendar.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/fullcalendar/fullcalendar.print.css') }}" media="print">
 
 <div class="row">
     @if(session('userId') && session('userId') == 1)
@@ -41,7 +40,7 @@
                 <div class="panel-heading">
                     <a href="{{ url('product') }}" style="text-decoration:none;color:black;">
                         Total Product
-                        <span class="badge pull pull-right">{{ $countProduct }}</span>
+                        <span class="badge pull pull-right" id="countProduct">{{ $countProduct }}</span>
                     </a>
                 </div>
             </div>
@@ -52,7 +51,7 @@
                 <div class="panel-heading">
                     <a href="{{ url('product') }}" style="text-decoration:none;color:black;">
                         Low Stock
-                        <span class="badge pull pull-right">{{ $countLowStock }}</span>
+                        <span class="badge pull pull-right" id="countLowStock">{{ $countLowStock }}</span>
                     </a>
                 </div>
             </div>
@@ -64,7 +63,7 @@
             <div class="panel-heading">
                 <a href="{{ url('orders?o=manord') }}" style="text-decoration:none;color:black;">
                     Total Orders
-                    <span class="badge pull pull-right">{{ $countOrder }}</span>
+                    <span class="badge pull pull-right" id="countOrder">{{ $countOrder }}</span>
                 </a>
             </div>
         </div>
@@ -84,7 +83,7 @@
 
         <div class="card">
             <div class="cardHeader" style="background-color:#245580;">
-                <h1>{{ $totalRevenue ? $totalRevenue : '0' }}</h1>
+                <h1 id="totalRevenue">{{ $totalRevenue ? $totalRevenue : '0' }}</h1>
             </div>
 
             <div class="cardContainer">
@@ -93,7 +92,7 @@
         </div>
     </div>
 
-    @if(session('userId') && session('userId') == 1)
+    @if(session('user') && session('user.id') == 1)
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -122,8 +121,8 @@
     @endif
 </div>
 
-<script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/fullcalendar/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>
 
 <script type="text/javascript">
     $(function () {

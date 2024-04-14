@@ -15,7 +15,7 @@ use App\Models\Order;
 use App\Models\Order_item;
 use App\Models\Product;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -32,7 +32,6 @@ class AuthServiceProvider extends ServiceProvider
         Order::class => OrderPolicy::class,
         Product::class => ProductPolicy::class,
         User::class => UserPolicy::class
-
     ];
 
     /**
@@ -43,6 +42,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        //
+        Gate::define('view-report', function ($user) {
+            return $user->role == 'audit';
+        });
     }
 }

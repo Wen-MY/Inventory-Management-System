@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory, SoftDeletes;
-
     protected $fillable = [
         'date', 
         'client_name', 
@@ -34,7 +33,6 @@ class Order extends Model
      *
      * @var array<int, string>
      */
-
     public function getOrderItem(){
         return $this->hasMany('App\Models\Order_item');
     }

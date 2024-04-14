@@ -326,10 +326,13 @@
                                     <div class="col-sm-8">
                                         <select class="form-control" id="editProductStatus" name="editProductStatus">
                                             <option value="">~~SELECT~~</option>
-                                            <option value="1" {{@if ($product->status == 1) selected @endif}}>
-                                                Available</option>
-                                            <option value="2" @if ($product->status == 2) selected @endif>
-                                                Not Available</option>
+                                            <option value="1" {{ $product->status == 1 ? 'selected' : '' }}>
+                                                Available
+                                            </option>
+
+                                            <option value="2" {{ $product->status == 2 ? 'selected' : '' }}>
+                                                Not Available
+                                            </option>
                                         </select>
                                     </div>
                                 </div> <!-- /form-group-->

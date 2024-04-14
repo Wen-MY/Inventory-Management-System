@@ -11,6 +11,12 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,11 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return view('home');
     }); //DEBUG purpose only
-    Route::get('/brand', [BrandController::class, 'index'])->name('brand');
-    Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+    Route::get('/brand', [BrandController::class, 'index'])->name('brand')->can('viewAny', Brand::class);
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories')->can('viewAny', Category::class);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/orders', [OrderController::class, 'index'])->name('order');
-    Route::get('/product', [ProductController::class, 'index'])->name('product');
+    Route::get('/orders', [OrderController::class, 'index'])->name('order')->can('viewAny', Order::class);
+    Route::get('/product', [ProductController::class, 'index'])->name('product')->can('viewAny', Product::class);
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
     Route::get('/user', [UserController::class, 'index'])->name('user');

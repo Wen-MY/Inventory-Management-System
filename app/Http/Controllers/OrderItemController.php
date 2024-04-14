@@ -103,7 +103,7 @@ class OrderItemController extends Controller
      */
     public function softDelete($id)
     {
-        $orderItem = OrderItem::find($id);
+        $orderItem = Order_Item::find($id);
         if (!$orderItem) {
             return response()->json(['message' => 'Order item not found'], 404);
         }
@@ -120,7 +120,7 @@ class OrderItemController extends Controller
      */
     public function softDeleted()
     {
-        $orderItems = OrderItem::onlyTrashed()->get();
+        $orderItems = Order_Item::onlyTrashed()->get();
         return response()->json(['orderItems' => $orderItems], 200);
     }
 
@@ -132,7 +132,7 @@ class OrderItemController extends Controller
      */
     public function restore($id)
     {
-        $orderItem = OrderItem::withTrashed()->find($id);
+        $orderItem = Order_Item::withTrashed()->find($id);
         if (!$orderItem) {
             return response()->json(['message' => 'Order item not found'], 404);
         }

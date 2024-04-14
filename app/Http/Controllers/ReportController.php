@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Gate;
 class ReportController extends Controller
 {
     public function index () {
-        return view('report');
+        if (Gate::allows('view-report')){
+            return view('report');
+        }
+        else {
+            // User is not authorized
+            abort(403);
+         }
     }
 
     public function generateReport(Request $request)
