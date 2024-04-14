@@ -75,9 +75,6 @@
                     @if(session()->has('user') && session('user.role')=='auditor')
                     <li id="navReport"><a href="{{ url('/report') }}"> <i class="glyphicon glyphicon-check"></i> Report </a></li>
                     @endif
-                    @if(session()->has('user') && session('user.role')=='admin')
-                    <li id="importbrand"><a href="{{ url('/importbrand') }}"> <i class="glyphicon glyphicon-check"></i> Import Brand </a></li>
-                    @endif
                     <li class="dropdown" id="navSetting">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-user"></i> <span class="caret"></span></a>
                         <ul class="dropdown-menu">

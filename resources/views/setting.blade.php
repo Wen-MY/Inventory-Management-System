@@ -1,30 +1,5 @@
 <x-header />
 
-<head>
-    <title>Stock Management System</title>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <!-- Bootstrap theme -->
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
-    <!-- jQuery -->
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <!-- jQuery UI -->
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
-    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-
-    <!--<script src="{{ asset('js/setting.js') }}"></script>-->
-</head>
-
 <div class="row">
     <div class="col-md-12">
         <ol class="breadcrumb">

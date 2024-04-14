@@ -1,29 +1,4 @@
 <x-header />
-<!--
-@php
-    $sql = "SELECT * FROM product WHERE status = 1";
-    $query = $connect->query($sql);
-    $countProduct = $query->num_rows;
-
-    $orderSql = "SELECT * FROM orders WHERE order_status = 1";
-    $orderQuery = $connect->query($orderSql);
-    $countOrder = $orderQuery->num_rows;
-
-    $totalRevenue = "";
-    while ($orderResult = $orderQuery->fetch_assoc()) {
-        $totalRevenue += $orderResult['paid'];
-    }
-    $lowStockSql = "SELECT * FROM product WHERE quantity <= 3 AND status = 1";
-    $lowStockQuery = $connect->query($lowStockSql);
-    $countLowStock = $lowStockQuery->num_rows;
-
-    $userwisesql = "SELECT users.username , SUM(orders.grand_total) as totalorder FROM orders INNER JOIN users ON orders.user_id = users.user_id WHERE orders.order_status = 1 GROUP BY orders.user_id";
-    $userwiseQuery = $connect->query($userwisesql);
-    $userwieseOrder = $userwiseQuery->num_rows;
-
-    $connect->close();
-@endphp
--->
 <style type="text/css">
     .ui-datepicker-calendar {
         display: none;
@@ -34,7 +9,7 @@
 <link rel="stylesheet" href="{{ asset('plugins/fullcalendar/fullcalendar.print.css') }}" media="print">
 
 <div class="row">
-    @if(session('userId') && session('userId') == 1)
+    @if(session('user'))
         <div class="col-md-4">
             <div class="panel panel-success">
                 <div class="panel-heading">
@@ -92,7 +67,7 @@
         </div>
     </div>
 
-    @if(session('user') && session('user.id') == 1)
+    @if(session('user'))
         <div class="col-md-8">
             <div class="panel panel-default">
                 <div class="panel-heading">

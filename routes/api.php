@@ -12,6 +12,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,3 +73,7 @@ Route::post('/delete-order/{id}', [OrderController::class, 'destroy']);
 //report
 Route::post('/report', [ReportController::class, 'generateReport']);
 Route::post('/generate-report', [ReportController::class, 'generateReport']);
+
+
+//dashboard
+Route::get('/dashboard', [DashboardController::class, 'dashboardData']);
