@@ -25,6 +25,7 @@ class OrderItemController extends Controller
             'status' => 'required|integer',
         ]);
         try {
+            $this->authorizeForUser(auth('api')->user(),'create',Order_item::class);
             $order_item = Order_item::create($request->all());
             return response()->json(['message' => 'Order_item created successfully.'], 201);
         } catch (\Exception $e) {
@@ -42,6 +43,7 @@ class OrderItemController extends Controller
     {
         try {
             $order_item = Order_item::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'view',$order_item);
             return response()->json(['message' => 'Order_item retrieved successfully.', 'data' => $order_item], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Order item not found.'], 404);
@@ -70,6 +72,7 @@ class OrderItemController extends Controller
         ]);
         try {
             $order_item = Order_item::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'update',$order_item);
             $order_item->update($request->all());
             return response()->json(['message' => 'Order_item updated successfully.'], 200);
         } catch (\Exception $e) {
@@ -88,42 +91,13 @@ class OrderItemController extends Controller
     {
         try{
             $order_item = Order_item::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'delete',$order_item);
             $order_item->deleteOrFail();
             return response()->json(['message' => 'Order_item deleted successfully.'], 200);
         }catch(\Exception $e){
             return response()->json(['message' => 'Failed to delete order item.'], 500);
         }
     }
-
-        /**
-     * Soft delete the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function softDelete($id)
-    {
-        $orderItem = Order_Item::find($id);
-        if (!$orderItem) {
-            return response()->json(['message' => 'Order item not found'], 404);
-        }
-        
-        $orderItem->delete();
-        
-        return response()->json(['message' => 'Order item soft deleted'], 200);
-    }
-
-    /**
-     * Display a listing of the soft deleted resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function softDeleted()
-    {
-        $orderItems = Order_Item::onlyTrashed()->get();
-        return response()->json(['orderItems' => $orderItems], 200);
-    }
-
     /**
      * Restore the specified soft deleted resource.
      *

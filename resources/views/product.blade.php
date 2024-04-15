@@ -13,13 +13,13 @@
             </div>
             <div class="panel-body">
                 <div class="remove-messages"></div>
-
+                @can('create', \App\Models\Product::class)
                 <div class="div-action pull pull-right" style="padding-bottom:20px;">
                     <button class="btn btn-default button1" data-toggle="modal" id="addProductModalBtn"
                         data-target="#addProductModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Product
                     </button>
                 </div>
-
+                @endcan
                 <table class="table" id="manageProductTable">
                     <thead>
                         <tr>
@@ -30,7 +30,9 @@
                             <th>Brand</th>
                             <th>Category</th>
                             <th>Status</th>
-                            <th style="width:15%;">Options</th>
+                            @can('update', $products)
+                                <th style="width:15%;">Options</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
@@ -50,6 +52,7 @@
                                         <label class="label label-danger">Not Available</label>
                                     @endif
                                 </td>
+                                @can('update', $product)
                                 <td>
                                     <!-- Single button -->
                                     <div class="btn-group">
@@ -70,6 +73,7 @@
                                         </ul>
                                     </div>
                                 </td>
+                                @endcan
                             </tr>
                         @endforeach
                     </tbody>
@@ -80,6 +84,7 @@
 </div>
 
 <!-- add product -->
+@can('create', \App\Models\Product::class)
 <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -190,9 +195,10 @@
         </div> <!-- /modal-content -->
     </div> <!-- /modal-dailog -->
 </div>
-<!-- /add categories -->
+@endcan
+<!-- /add product -->
 
-<!-- edit categories brand -->
+<!-- edit product -->
 <div class="modal fade" tabindex="-1" role="dialog" id="editProductModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -356,9 +362,9 @@
     </div>
     <!-- /modal-dialog -->
 </div>
-<!-- /categories brand -->
+<!-- /edit product -->
 
-<!-- categories brand -->
+<!-- remove product -->
 <div class="modal fade" tabindex="-1" role="dialog" id="removeProductModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -381,7 +387,7 @@
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div><!-- remove product -->
 
 <script>
     function previewAddProductImage(event) {

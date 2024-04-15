@@ -29,7 +29,7 @@ class CreateOrdersTable extends Migration
             $table->integer('payment_status');
             $table->integer('payment_place');
             $table->string('gstn',255);
-            $table->integer('order_status')->default(0);
+            $table->integer('order_status')->default(1);
             $table->bigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();

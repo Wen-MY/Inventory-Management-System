@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('view-report', function ($user) {
-            return $user->role == 'audit';
+            return $user->role == 'auditor';
         });
     }
 }

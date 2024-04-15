@@ -41,7 +41,7 @@ class AuthController extends Controller
     /**
      * Register a User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
     {
@@ -67,13 +67,13 @@ class AuthController extends Controller
     /**
      * Log the user out (Invalidate the token).
      *
-     * @return \Illuminate\Http\RedirectResponse
+     *  @return \Illuminate\Http\JsonResponse
      */
     public function logout()
     {
         auth()->logout();
         Session::forget('user');
-        return redirect('/');
+        return response()->json(['message' => 'User successfully logged out'], 200);
     }
 
     /**

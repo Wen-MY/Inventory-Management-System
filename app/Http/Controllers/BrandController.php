@@ -14,6 +14,7 @@ class BrandController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny',Brand::class);
         $brands = Brand::paginate(10);
         return view('brand', ['brands' => $brands]);
     }
@@ -32,7 +33,7 @@ class BrandController extends Controller
         // ]);
 
         try {
-
+            $this->authorizeForUser(auth('api')->user(),'create',Brand::class);
             Brand::create([
                 'name' => $request->brandName,
                 'status'=> $request->brandStatus,
@@ -54,6 +55,7 @@ class BrandController extends Controller
     {
         try {
             $brand = Brand::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'view',$brand);
             return response()->json(['message' => 'Brand retrieved successfully.', 'data' => $brand], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Brand not found.'], 404);
@@ -79,6 +81,7 @@ class BrandController extends Controller
         
         try {
             $brand= Brand::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'update',$brand);
             $brand->update([
                 'name' => $request->editBrandName,
                 'status' => $request->editBrandStatus,
@@ -102,42 +105,13 @@ class BrandController extends Controller
     {
         try {
             $brand = Brand::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'delete',$brand);
             $brand->delete(); 
             return response()->json(['message' => 'Brand deleted successfully.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to delete brand.'], 500);
         }
     }
-
-        /**
-     * Soft delete the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function softDelete($id)
-    {
-        $brand = Brand::find($id);
-        if (!$brand) {
-            return response()->json(['message' => 'Brand not found'], 404);
-        }
-        
-        $brand->delete();
-        
-        return response()->json(['message' => 'Brand soft deleted'], 200);
-    }
-
-    /**
-     * Display a listing of the soft deleted resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function softDeleted()
-    {
-        $brands = Brand::onlyTrashed()->get();
-        return response()->json(['brands' => $brands], 200);
-    }
-
     /**
      * Restore the specified soft deleted resource.
      *

@@ -21,8 +21,8 @@ class CreateProductsTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->string('quantity',255);
             $table->string('rate',255);
-            $table->integer('active')->default(0);
-            $table->integer('status')->default(0);
+            $table->integer('active')->default(1);
+            $table->integer('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

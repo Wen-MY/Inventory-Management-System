@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Policies;
-
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -29,8 +28,8 @@ class OrderPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, Order $order)
-    {
-        return $user->role == 'admin';
+    { 
+        return $user->role === 'admin';
     }
 
     /**
@@ -41,7 +40,7 @@ class OrderPolicy
      */
     public function create(User $user)
     {
-        return $user->role == 'admin' || $user->role == 'staff';
+        return $user->role === 'admin'|| $user->role === 'staff';
     }
 
     /**
@@ -53,7 +52,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order)
     {
-        return $user->role == 'admin';
+        return $user->role === 'admin';
     }
 
     /**

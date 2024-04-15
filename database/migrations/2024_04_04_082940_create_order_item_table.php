@@ -20,7 +20,7 @@ class CreateOrderItemTable extends Migration
             $table->string('quantity',255);
             $table->string('rate',255);
             $table->string('total',255);
-            $table->integer('status')->default(0);
+            $table->integer('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

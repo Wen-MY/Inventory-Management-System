@@ -16,6 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
+         //authorization check
+        $this->authorize('viewAny', Product::class);
+
         $products = Product::paginate(10);
         $brands = Brand::where('active', 1)->where('status', 1)->get();
         $categories = Category::where('active', 1)->where('status', 1)->get();
@@ -27,7 +30,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse 
      */
     public function store(Request $request)
     {
@@ -41,6 +44,9 @@ class ProductController extends Controller
         // ]);
 
         try {
+            //authorization check
+            $this->authorizeForUser(auth('api')->user(),'create',Product::class);
+           
             $imageName = time().'.'.$request->productImage->extension();  
             $request->productImage->move(public_path('images'), $imageName);
 
@@ -55,7 +61,7 @@ class ProductController extends Controller
             ]);
             return redirect('product')->with('success', 'Product created successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput();
+            return redirect()->back()->withInput()->with('error' ,'Failed to create product.' . $e->getMessage());
         }
     }    
 
@@ -69,6 +75,10 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+
+            //authorization check
+            $this->authorizeForUser(auth('api')->user(),'view',$product);
+            
             return response()->json(['message' => 'Product retrieved successfully.', 'product' => $product], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Product not found.'], 404);
@@ -80,6 +90,7 @@ class ProductController extends Controller
     public function showAll(){
         try {
             $product = Product::all();
+            $this->authorizeForUser(auth('api')->user(),'viewAny',Product::class);
             return response()->json(['message' => 'Products retrieved successfully.', 'product' => $product], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Products not found.'], 404);
@@ -100,7 +111,7 @@ class ProductController extends Controller
         
         try {
             $product = Product::findOrFail($id);
-    
+            $this->authorizeForUser(auth('api')->user(),'update',$product);
             if ($request->hasFile('editProductImage')) {
                 $image = $request->file('editProductImage');
                 $imageName = time().'.'.$image->extension();  // Use $image->extension() instead of $request->productImage->extension()
@@ -129,7 +140,7 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            
+            $this->authorizeForUser(auth('api')->user(),'update',$product);
             // Update the attributes
             $product->name = $request->input('editProductName');
             $product->quantity = $request->input('editQuantity');
@@ -146,30 +157,6 @@ class ProductController extends Controller
             return response()->json(['message' => 'Failed to update product.'], 500);
         }
     }    
-    
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $id
-     * @return \Illuminate\Http\Response
-     * 
-     * THIS ONLY UPDATE PRODUCT IMAGE
-     */
-    public function updateImage(Request $request, $id)
-    {
-        $request->validate([
-            'image' => 'required'
-        ]);
-        try {
-            $product = Product::findOrFail($id);
-            $this->authorize('update', $product); //check user role
-            $product->update($request->all());
-            return response()->json(['message' => 'Product updated successfully.'], 201);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to update product.'], 500);
-        }
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -181,42 +168,13 @@ class ProductController extends Controller
     {
         try{
             $product = Product::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'delete',$product);
             $product->delete();
             return response()->json(['message' => 'Product deleted successfully.'], 200);
         }catch(\Exception $e){
             return response()->json(['message' => 'Failed to delete product.'], 500);
         }
     }
-
-        /**
-     * Soft delete the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function softDelete($id)
-    {
-        $product = Product::find($id);
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-        
-        $product->delete();
-        
-        return response()->json(['message' => 'Product soft deleted'], 200);
-    }
-
-    /**
-     * Display a listing of the soft deleted resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function softDeleted()
-    {
-        $products = Product::onlyTrashed()->get();
-        return response()->json(['products' => $products], 200);
-    }
-
     /**
      * Restore the specified soft deleted resource.
      *

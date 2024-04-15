@@ -33,13 +33,14 @@ use App\Http\Controllers\DashboardController;
 Route::group([
     'middleware' => 'api',
 ], function ($router) {
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
 });
 
-Route::post('/changeUsername', [SettingController::class, 'changeUsername'])->name('changeUsername');
-Route::post('/changePassword', [SettingController::class, 'changePassword'])->name('changePassword');
+Route::post('/changeUsername', [SettingController::class, 'changeUsername'])
+    ->name('changeUsername');
+Route::post('/changePassword', [SettingController::class, 'changePassword'])
+    ->name('changePassword');
 
 
 Route::post('/createUser', [UserController::class, 'store'])->name('createUser');

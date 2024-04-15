@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Order;
 use App\Models\Order_item;
 use App\Models\Product;
@@ -17,6 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny',Order::class); //using web so no need use authorize for
         $orders = Order::paginate(10);
         $products = Product::all();
         
@@ -61,6 +61,7 @@ class OrderController extends Controller
         ]);
         */
         try{
+            $this->authorizeForUser(auth('api')->user(),'create',Order::class);
             $order = new Order;
             $orderDate = Carbon::createFromFormat('m/d/Y', $request->orderDate)->format('Y-m-d');
             $order->date = $orderDate;
@@ -106,13 +107,16 @@ class OrderController extends Controller
     {
         try {
             $order = Order::findOrFail($id);
+
+            $this->authorizeForUser(auth('api')->user(),'view',$order);
+
             $orderDate = Carbon::createFromFormat('Y-m-d', $order->date)->format('m/d/Y');
             $order->date = $orderDate;
             return response()->json(['message' => 'Order retrieved successfully.', 'order' => $order], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Order not found.'], 404);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve order.'], 500);
+            return response()->json(['message' => 'Failed to retrieve order.' . $e->getMessage()], 500);
         }
     }
     
@@ -148,6 +152,9 @@ class OrderController extends Controller
 
         try {
             $order = Order::findOrFail($id);
+
+            $this->authorizeForUser(auth('api')->user(),'update',$order);
+
             $orderDate = Carbon::createFromFormat('m/d/Y', $request->orderDate)->format('Y-m-d');
             $order->date = $orderDate;
             $order->client_name = $request->clientName;
@@ -191,6 +198,7 @@ class OrderController extends Controller
     {
         try {
             $order = Order::findOrFail($id);
+            $this->authorizeForUser(auth('api')->user(),'delete',$order);
             $order->delete();
     
             Order_item::where('order_id', $id)->delete();

@@ -15,42 +15,36 @@ class SettingController extends Controller
     public function changeUsername(Request $request)
     {
         $request->validate([
-            'user_id' => 'required', // Assuming user_id is sent in the request
             'username' => 'required|max:50',
         ]);
-
-        $user = User::find($request->input('user_id'));
-        
+        $user = Auth::guard('api')->user(); //get user from token submited
         if (!$user) {
-            return redirect()->back()->with('error', 'User not found.');
+            return response()->json(['error' => 'User not found.'], 404);
         }
-
+        $this->authorizeForUser(auth('api')->user(),'update',$user);
         $user->username = $request->input('username');
         $user->save();
 
-        return redirect()->back()->with('success', 'Username changed successfully.');
+        return response()->json(['message' => 'Username changed successfully.'], 200);
     }
 
     public function changePassword(Request $request)
     {
         /*
         $request->validate([
-            'user_id' => 'required', // Assuming user_id is sent in the request
             'password' => 'required|min:8',
             'npassword' => 'required|min:8|confirmed',
         ]);
         */
-        $user = User::find($request->input('user_id'));
+        $user = Auth::guard('api')->user(); //get user from token submited
         
         if (!$user) {
-            return redirect()->back()->with('error', 'User not found.');
+            return response()->json(['error' => 'User not found.'], 404);
         }
-
-        // Validate current password if needed
-        // Perform password change logic
+        $this->authorizeForUser(auth('api')->user(),'update',$user);
         $user->password = bcrypt($request->input('npassword'));
         $user->save();
 
-        return redirect()->back()->with('success', 'Password changed successfully.');
+        return response()->json(['message' => 'Password changed successfully.'], 200);
     }
 }

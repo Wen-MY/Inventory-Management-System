@@ -43,46 +43,42 @@
                     <img src="{{ asset('logo.png') }}" alt="">
                 </a>
             </div>
-
+            <div class="messages"></div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                 <ul class="nav navbar-nav navbar-right">
 
                     <li id="navDashboard"><a href="{{ url('/') }}"><i class="glyphicon glyphicon-list-alt"></i> Dashboard</a></li>
-                    @if(session()->has('user') && session('user.role')=='admin')
+                    @if(session()->has('user') && session('user.role') == 'admin')
                     <li id="navBrand"><a href="{{ url('/brand') }}"><i class="glyphicon glyphicon-btc"></i> Brand</a></li>
                     @endif
-                    @if(session()->has('user') && session('user.role')=='admin')
+                    @if(session()->has('user') && session('user.role') == 'admin')
                     <li id="navCategories"><a href="{{ url('/categories') }}"> <i class="glyphicon glyphicon-th-list"></i> Category</a></li>
                     @endif
-                    @if(session()->has('user') && (session('user.role')=='staff' || session('user.role') == 'admin'))
+                    @if(session()->has('user') && (session('user.role') == 'staff' || session('user.role') == 'admin'))
                     <li id="navProduct"><a href="{{ url('/product') }}"> <i class="glyphicon glyphicon-ruble"></i> Product </a></li>
                     @endif
-
+                    @if(session()->has('user') && (session('user.role') == 'staff' || session('user.role') == 'admin'))
                     <li class="dropdown" id="navOrder">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-shopping-cart"></i> Orders <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            @if(session()->has('user') && (session('user.role')=='staff' || session('user.role') == 'admin'))
                             <li id="topNavAddOrder"><a href="{{ url('/orders?o=add') }}"> <i class="glyphicon glyphicon-plus"></i> Add Orders</a></li>
-                            @endif
-                            @if(session()->has('user') && session('user.role')=='admin')
                             <li id="topNavManageOrder"><a href="{{ url('/orders?o=manord') }}"> <i class="glyphicon glyphicon-edit"></i> Manage Orders</a></li>
-                            @endif
                         </ul>
                     </li>
-
-                    @if(session()->has('user') && session('user.role')=='auditor')
+                    @endif
+                    @if(session()->has('user') && session('user.role') == 'auditor')
                     <li id="navReport"><a href="{{ url('/report') }}"> <i class="glyphicon glyphicon-check"></i> Report </a></li>
                     @endif
                     <li class="dropdown" id="navSetting">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="glyphicon glyphicon-user"></i> <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li id="topNavSetting"><a href="{{ url('/setting') }}"> <i class="glyphicon glyphicon-wrench"></i> Setting</a></li>
-                            @if(session()->has('user') && session('user.role')=='admin')
+                            @if(session()->has('user') && session('user.role') == 'admin')
                             <li id="topNavUser"><a href="{{ url('/user') }}"> <i class="glyphicon glyphicon-wrench"></i> Add User</a></li>
                             @endif
-                            <li id="topNavLogout"><a href="{{ url('/logout') }}"> <i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                            <li id="topNavLogout"><a href="#" onclick="logout()"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
                         </ul>
                     </li>
 
@@ -90,4 +86,25 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+    <script>
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: { // Corrected property name to 'headers'
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token in the request headers
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    localStorage.removeItem('token');
+                    // Redirect to homepage or perform any other action
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                document.querySelector('.messages').innerHTML =
+                    '<div class="alert alert-danger" role="alert">Logout failed. Please try again.</div>';
+            });
+        }
+    </script>
     <div class="container">

@@ -1,6 +1,9 @@
 <x-header />
 <script src="{{ asset('/js/order.js') }}"></script>
 <script>
+    function getToken() {
+        return localStorage.getItem('token');
+    }
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -11,6 +14,11 @@
     function fetchOrderToUpdate(id) {
         fetch('api/get-order/' + id, {
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -88,6 +96,11 @@
         fetch('api/update-order/' + orderId, {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -172,6 +185,11 @@
 
         fetch('api/delete-order/' + id, {
                 method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -244,7 +262,13 @@ function createOrder(event) {
 
     fetch('api/create-order', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+            'Authorization': 'Bearer ' + getToken(), // Include bearer token
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        credentials: 'include'
+        
     })
     .then(response => {
         if (response.ok) {
@@ -290,8 +314,10 @@ function createOrder(event) {
         Add Order
     @elseif(request()->has('o') && request()->o == 'manord')
         Manage Order
+    @can('update', $orders)
     @elseif(request()->has('o') && request()->o == 'editOrd')
         Edit Order
+    @endcan
     @endif
 </h4>
 
@@ -301,9 +327,12 @@ function createOrder(event) {
             <i class="glyphicon glyphicon-plus-sign"></i> Add Order
         @elseif(request()->has('o') && request()->o == 'manord')
             <i class="glyphicon glyphicon-edit"></i> Manage Order
+        @can('update', $orders)
         @elseif(request()->has('o') && request()->o == 'editOrd')
             <i class="glyphicon glyphicon-edit"></i> Edit Order
+        @endcan
         @endif
+        
     </div>
 
     @if (request()->has('o') && request()->o == 'add')
@@ -509,7 +538,9 @@ function createOrder(event) {
                         <th>Contact</th>
                         <th>Total Order Item</th>
                         <th>Payment Status</th>
-                        <th>Option</th>
+                        @can('update', $orders) <!-- Pass the $order instance -->
+                            <th id="option">Option</th>
+                        @endcan
                     </tr>
                 </thead>
                 <tbody>
@@ -530,11 +561,13 @@ function createOrder(event) {
                                 @endif
                             </td>
                             <td>
+                            @can('update',$order)
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default dropdown-toggle"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                     </button>
+                                    
                                     <ul class="dropdown-menu">
                                         <li><a href="orders?o=editOrd&i={{ $order->id }}"
                                                 id="editOrderModalBtn"><i class="glyphicon glyphicon-edit"></i>
@@ -544,12 +577,14 @@ function createOrder(event) {
                                                 id="removeOrderModalBtn" onclick="setOrderId({{ $order->id }})">
                                                 <i class="glyphicon glyphicon-trash"></i> Remove</a></li>
                                     </ul>
-                                </div>'
+                                </div>
+                             @endcan
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+        @can('update', $orders)
         @elseif (request()->has('o') && request()->o == 'editOrd')
             <form class="form-horizontal" method="POST" onsubmit="updateOrder(event)" id="editOrderForm">
                 <div class="form-group">
@@ -755,6 +790,7 @@ function createOrder(event) {
                     </div>
                 </div>
             </form>
+        @endcan
     </div>
 </div>
 

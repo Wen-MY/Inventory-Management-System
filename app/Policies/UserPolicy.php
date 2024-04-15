@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return $user->id == $model->id || $user->role == 'admin'; //admin can change all while user self also can change own only
+        return $user->id === $model->id || $user->role === 'admin'; //admin can change all while user self also can change own only
     }
 
     /**

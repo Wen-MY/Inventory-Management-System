@@ -36,7 +36,6 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->m
 Route::post('/login',[AuthController::class, 'login']);
 Route::get('/register', [AuthController::class,'showRegisterForm'])->name('register')->middleware('redirectIfAuthenticated');
 Route::post('/register',[AuthController::class, 'register']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/brand', [BrandController::class, 'index'])->name('brand')->can('viewAny', Brand::class);
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories')->can('viewAny', Category::class);
@@ -46,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting');
     Route::get('/user', [UserController::class, 'index'])->name('user');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 

@@ -41,7 +41,7 @@ class OrderItemPolicy
      */
     public function create(User $user)
     {
-        return $user->role == 'admin';
+        return $user->role == 'admin' || $user->role == 'staff';
     }
 
     /**
