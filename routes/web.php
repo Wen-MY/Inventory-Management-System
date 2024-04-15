@@ -34,9 +34,12 @@ Route::get('/', function () {
 });
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('redirectIfAuthenticated');
 Route::post('/login',[AuthController::class, 'login']);
+
 Route::get('/register', [AuthController::class,'showRegisterForm'])->name('register')->middleware('redirectIfAuthenticated');
 Route::post('/register',[AuthController::class, 'register']);
+
 Route::middleware('auth')->group(function () {
+    Route::get('dashboard', function () {return redirect('/home');});
     Route::get('/brand', [BrandController::class, 'index'])->name('brand')->can('viewAny', Brand::class);
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories')->can('viewAny', Category::class);
     Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
