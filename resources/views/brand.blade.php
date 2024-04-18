@@ -18,7 +18,8 @@
                 <div class="remove-messages"></div>
 
                 <div class="div-action pull pull-right" style="padding-bottom:20px;">
-                    <button class="btn btn-default button1" id="addBrandModalBtn" data-toggle="modal" data-target="#addBrandModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Brand </button>
+                    <button class="btn btn-default button1" id="addBrandModalBtn" data-toggle="modal"
+                        data-target="#addBrandModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Brand </button>
                 </div>
                 <!-- /div-action -->
 
@@ -43,12 +44,21 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Action <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a type="button" data-toggle="modal" id="editBrandModalBtn" data-target="#editBrandModal" onclick="showEditBrand({{ $brand->id }})"> <i class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                                            <li><a type="button" data-toggle="modal" data-target="#removeBrandModal" id="removeBrandModalBtn" onclick="setBrandId({{ $brand->id }})"> <i class="glyphicon glyphicon-trash"></i> Remove</a></li>
+                                            <li>
+                                                <a href="#" data-toggle="modal" id="editBrandModalBtn"
+                                                    data-target="#editBrandModal"
+                                                    onclick="showEditBrand('{{ $brand->id }}')">
+                                                    <i class="glyphicon glyphicon-edit"></i> Edit
+                                                </a>
+                                            </li>
+                                            <li><a type="button" data-toggle="modal" data-target="#removeBrandModal"
+                                                    id="removeBrandModalBtn" onclick="setBrandId({{ $brand->id }})">
+                                                    <i class="glyphicon glyphicon-trash"></i> Remove</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -72,13 +82,20 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form class="form-horizontal" id="submitBrandForm" action="/api/create-brands" method="POST">
+            <form class="form-horizontal" id="submitBrandForm" onsubmit=createBrand(event) method="POST">
                 @csrf
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add Brand</h4>
                 </div>
                 <div class="modal-body">
+
+                @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        @endif
 
                     <div id="add-brand-messages"></div>
 
@@ -86,7 +103,8 @@
                         <label for="brandName" class="col-sm-3 control-label">Brand Name: </label>
                         <label class="col-sm-1 control-label">: </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="brandName" placeholder="Brand Name" name="brandName" autocomplete="off">
+                            <input type="text" class="form-control" id="brandName" placeholder="Brand Name"
+                                name="brandName" autocomplete="off">
                         </div>
                     </div>
                     <!-- /form-group-->
@@ -107,9 +125,11 @@
                 <!-- /modal-body -->
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-remove-sign"></i>Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="glyphicon glyphicon-remove-sign"></i>Close</button>
 
-                    <button type="submit" class="btn btn-primary" id="createBrandBtn" data-loading-text="Loading..." autocomplete="off"><i class="glyphicon glyphicon-ok-sign"></i>Save Changes</button>
+                    <button type="submit" class="btn btn-primary" id="createBrandBtn" data-loading-text="Loading..."
+                        autocomplete="off"><i class="glyphicon glyphicon-ok-sign"></i>Save Changes</button>
                 </div>
                 <!-- /modal-footer -->
             </form>
@@ -126,28 +146,35 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <form class="form-horizontal" id="editBrandForm" action="/api/edit-brand/" method="POST">
+            <form class="form-horizontal" id="editBrandForm" onsubmit=updateBrand(event) method="POST">
                 @csrf
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title"><i class="fa fa-edit"></i> Edit Brand</h4>
                 </div>
                 <div class="modal-body">
 
-                    <div id="edit-brand-messages"></div>
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    @endif
 
-                    <div class="modal-loading div-hide" style="width:50px; margin:auto;padding-top:50px; padding-bottom:50px;">
+                    <div class="modal-loading div-hide"
+                        style="width:50px; margin:auto;padding-top:50px; padding-bottom:50px;">
                         <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
                     </div>
 
                     <div class="edit-brand-result">
-                    <input type="hidden" name="editBrandId" id="editBrandId" value="">
+                        <input type="hidden" name="editBrandId" id="editBrandId" value="">
                         <div class="form-group">
                             <label for="editBrandName" class="col-sm-3 control-label">Brand Name: </label>
                             <label class="col-sm-1 control-label">: </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="editBrandName" placeholder="Brand Name" name="editBrandName" autocomplete="off">
+                                <input type="text" class="form-control" id="editBrandName"
+                                    placeholder="Brand Name" name="editBrandName" autocomplete="off">
                             </div>
                         </div>
                         <!-- /form-group-->
@@ -170,9 +197,11 @@
                 <!-- /modal-body -->
 
                 <div class="modal-footer editBrandFooter">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                            class="glyphicon glyphicon-remove-sign"></i> Close</button>
 
-                    <button type="submit" class="btn btn-success" id="editBrandBtn" data-loading-text="Loading..." autocomplete="off"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
+                    <button type="submit" class="btn btn-success" id="editBrandBtn" data-loading-text="Loading..."
+                        autocomplete="off"> <i class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
                 </div>
                 <!-- /modal-footer -->
             </form>
@@ -189,7 +218,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><i class="glyphicon glyphicon-trash"></i> Remove Brand</h4>
             </div>
             <div class="modal-body">
@@ -197,9 +227,12 @@
                 <p>Do you really want to remove this brand?</p>
             </div>
             <div class="modal-footer removeBrandFooter">
-                <button type="button" class="btn btn-default" data-dismiss="modal"> <i class="glyphicon glyphicon-remove-sign"></i> Cancel</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                        class="glyphicon glyphicon-remove-sign"></i> Cancel</button>
                 <!-- Use data-brand-id to store the brand ID -->
-                <button type="button" class="btn btn-primary" id="removeBrandBtn" onclick="removeBrand(document.getElementById('brandIdToDelete').value)"> <i class="glyphicon glyphicon-ok-sign"></i> Confirm</button>
+                <button type="button" class="btn btn-primary" id="removeBrandBtn"
+                    onclick="removeBrand(document.getElementById('brandIdToDelete').value)"> <i
+                        class="glyphicon glyphicon-ok-sign"></i> Confirm</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -208,17 +241,54 @@
 </div>
 <!-- /remove brand -->
 
-<script src="{{ asset('js/brand.js') }}"></script>
-
 <script>
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
+    function createBrand(event) {
+        event.preventDefault();
+
+        var formData = new FormData(event.target);
+
+        fetch('api/create-brand', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to create brand');
+                }
+            })
+            .then(data => {
+                window.location.href = '/brand';
+            })
+            .catch(error => {
+                console.error('Error creating new brand:', error);
+            });
+    }
+
     function setBrandId(brandId) {
         document.getElementById('brandIdToDelete').value = brandId;
     }
 
     function showEditBrand(id) {
-        event.preventDefault();
-
-        fetch('/api/get-brands/' + id)
+        console.log("yes")
+        fetch('/api/get-brand/' + id, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
+            })
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -232,7 +302,6 @@
                 document.getElementById('editBrandName').value = brand.name;
                 document.getElementById('editBrandStatus').value = brand.status;
 
-                // Dynamically update the action attribute of the form
                 var editForm = document.getElementById('editBrandForm');
                 editForm.action = '/api/edit-brand/' + brand.id;
 
@@ -240,7 +309,36 @@
             })
             .catch(error => {
                 console.error('Failed to fetch brand details:', error);
-                // Optionally, display an error message to the user
+            });
+    }
+
+    function updateBrand(event) {
+        event.preventDefault();
+
+        var formData = new FormData(event.target);
+
+        fetch('api/update-brand/' + document.getElementById('editBrandId').value, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
+
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to update brand');
+                }
+            })
+            .then(data => {
+                window.location.href = '/brand';
+            })
+            .catch(error => {
+                console.error('Error updating brand:', error);
             });
     }
 
@@ -251,33 +349,35 @@
         }
 
         // Make a DELETE request to the specified route with the brand ID
-        fetch(`/api/delete-brands/${brandId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any additional headers if needed
-            },
-        })
-        .then(response => {
-            if (response.ok) {
-                // If the deletion is successful, reload the page or perform any other action
-                window.location.reload();
-            } else {
-                // If there is an error, display a message or handle it accordingly
-                console.error('Failed to delete brand');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        fetch(`/api/delete-brand/${brandId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If the deletion is successful, reload the page or perform any other action
+                    window.location.reload();
+                } else {
+                    // If there is an error, display a message or handle it accordingly
+                    console.error('Failed to delete brand');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     }
 
     // Attach click event listener to the "Confirm" button in the removeBrandModal
-    $('#removeBrandModal').on('show.bs.modal', function (event) {
+    $('#removeBrandModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var brandId = button.data('brand-id'); // Extract brand ID from data-* attributes
         var modal = $(this);
-        modal.find('#removeBrandBtn').attr('data-brand-id', brandId); // Set the data-brand-id attribute of the Confirm button
+        modal.find('#removeBrandBtn').attr('data-brand-id',
+            brandId); // Set the data-brand-id attribute of the Confirm button
     });
 
     // Handle click event of the "Confirm" button

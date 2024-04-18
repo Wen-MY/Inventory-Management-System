@@ -39,7 +39,7 @@ class BrandController extends Controller
                 'status'=> $request->brandStatus,
             ]);
 
-            return redirect('brand')->with('success', 'Brand created successfully.');
+            return response()->json(['message' => 'Success to create brand.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create brand.'], 500);
         }
@@ -87,8 +87,7 @@ class BrandController extends Controller
                 'status' => $request->editBrandStatus,
             ]);
 
-            return redirect('brand')->with('success', 'Brand updated successfully.');
-
+            return response()->json(['message' => 'Success to update brand.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update brand.'], 500);
         }

@@ -15,16 +15,16 @@ class Brand extends Model
      *
      * @var array<int, string>
      */
+    public $timestamps = true;
+
     protected $fillable = [
         'name',
         'active',
         'status'
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<int, string>
-     */
+    // public function product(){
+    //     return $this->belongsTo('App\Models\Product');
+    // }
 }
 

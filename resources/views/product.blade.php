@@ -14,11 +14,11 @@
             <div class="panel-body">
                 <div class="remove-messages"></div>
                 @can('create', \App\Models\Product::class)
-                <div class="div-action pull pull-right" style="padding-bottom:20px;">
-                    <button class="btn btn-default button1" data-toggle="modal" id="addProductModalBtn"
-                        data-target="#addProductModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Product
-                    </button>
-                </div>
+                    <div class="div-action pull pull-right" style="padding-bottom:20px;">
+                        <button class="btn btn-default button1" data-toggle="modal" id="addProductModalBtn"
+                            data-target="#addProductModal"> <i class="glyphicon glyphicon-plus-sign"></i> Add Product
+                        </button>
+                    </div>
                 @endcan
                 <table class="table" id="manageProductTable">
                     <thead>
@@ -53,26 +53,26 @@
                                     @endif
                                 </td>
                                 @can('update', $product)
-                                <td>
-                                    <!-- Single button -->
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default dropdown-toggle"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a type="button" data-toggle="modal" id="editProductModalBtn"
-                                                    data-target="#editProductModal"
-                                                    onclick="showEditProduct({{ $product->id }})"> <i
-                                                        class="glyphicon glyphicon-edit"></i> Edit</a></li>
-                                            <li><a type="button" data-toggle="modal" data-target="#removeProductModal"
-                                                    onclick="setProductId({{ $product->id }})">
-                                                    <i class="glyphicon glyphicon-trash"></i> Remove
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                    <td>
+                                        <!-- Single button -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a type="button" data-toggle="modal" id="editProductModalBtn"
+                                                        data-target="#editProductModal"
+                                                        onclick="showEditProduct({{ $product->id }})"> <i
+                                                            class="glyphicon glyphicon-edit"></i> Edit</a></li>
+                                                <li><a type="button" data-toggle="modal" data-target="#removeProductModal"
+                                                        onclick="setProductId({{ $product->id }})">
+                                                        <i class="glyphicon glyphicon-trash"></i> Remove
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
                                 @endcan
                             </tr>
                         @endforeach
@@ -85,116 +85,121 @@
 
 <!-- add product -->
 @can('create', \App\Models\Product::class)
-<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" id="submitProductForm" action="/api/create-product" method="POST"
-                enctype="multipart/form-data">
-                @csrf
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="fa fa-plus"></i> Add Product</h4>
-                </div>
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" id="submitProductForm" onsubmit=addProduct(event) method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title"><i class="fa fa-plus"></i> Add Product</h4>
+                    </div>
 
-                <div class="modal-body" style="max-height:450px; overflow:auto;">
-                    <div class="form-group">
-                        <label for="productImage" class="col-sm-3 control-label">Product Image: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <div id="kv-avatar-errors-1" class="center-block" style="display:none;"></div>
-                            <div class="kv-avatar center-block">
-                                <img id="addProductImagePreview" alt="Product Image"
-                                    style="width: 150px; height: 150px;">
-                                <input type="file" class="form-control" id="productImage" placeholder="Product Name"
-                                    name="productImage" class="file-loading" style="width:auto;"
-                                    onchange="previewAddProductImage(event)" />
+                    <div class="modal-body" style="max-height:450px; overflow:auto;">
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        @endif
+                        <div class="form-group">
+                            <label for="productImage" class="col-sm-3 control-label">Product Image: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <div id="kv-avatar-errors-1" class="center-block" style="display:none;"></div>
+                                <div class="kv-avatar center-block">
+                                    <img id="addProductImagePreview" alt="Product Image"
+                                        style="width: 150px; height: 150px;">
+                                    <input type="file" class="form-control" id="productImage" placeholder="Product Name"
+                                        name="productImage" class="file-loading" style="width:auto;"
+                                        onchange="previewAddProductImage(event)" />
+                                </div>
                             </div>
-                        </div>
-                    </div> <!-- /form-group-->
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="productName" class="col-sm-3 control-label">Product Name: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="productName" placeholder="Product Name"
-                                name="productName" autocomplete="off">
-                            @if ($errors->has('productName'))
-                                <span class="text-danger">{{ $errors->first('productName') }}</span>
-                            @endif
-                        </div>
-                    </div> <!-- /form-group-->
+                        <div class="form-group">
+                            <label for="productName" class="col-sm-3 control-label">Product Name: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="productName" placeholder="Product Name"
+                                    name="productName" autocomplete="off">
+                                @if ($errors->has('productName'))
+                                    <span class="text-danger">{{ $errors->first('productName') }}</span>
+                                @endif
+                            </div>
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="quantity" class="col-sm-3 control-label">Quantity: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="quantity" placeholder="Quantity"
-                                name="quantity" autocomplete="off">
-                        </div>
-                    </div> <!-- /form-group-->
+                        <div class="form-group">
+                            <label for="quantity" class="col-sm-3 control-label">Quantity: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="quantity" placeholder="Quantity"
+                                    name="quantity" autocomplete="off">
+                            </div>
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="rate" class="col-sm-3 control-label">Rate: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="rate" placeholder="Rate"
-                                name="rate" autocomplete="off">
-                        </div>
-                    </div> <!-- /form-group-->
+                        <div class="form-group">
+                            <label for="rate" class="col-sm-3 control-label">Rate: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="rate" placeholder="Rate"
+                                    name="rate" autocomplete="off">
+                            </div>
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="brandName" class="col-sm-3 control-label">Brand Name: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <select class="form-control" id="brandName" name="brandName">
-                                <option value="">~~SELECT~~</option>
-                                @foreach ($brands as $brand)
-                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div> <!-- /form-group-->
+                        <div class="form-group">
+                            <label for="brandName" class="col-sm-3 control-label">Brand Name: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="brandName" name="brandName">
+                                    <option value="">~~SELECT~~</option>
+                                    @foreach ($brands as $brand)
+                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="categoryName" class="col-sm-3 control-label">Category Name: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <select type="text" class="form-control" id="categoryName" placeholder="Product Name"
-                                name="categoryName">
-                                <option value="">~~SELECT~~</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div> <!-- /form-group-->
+                        <div class="form-group">
+                            <label for="categoryName" class="col-sm-3 control-label">Category Name: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" id="categoryName" placeholder="Product Name"
+                                    name="categoryName">
+                                    <option value="">~~SELECT~~</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> <!-- /form-group-->
 
-                    <div class="form-group">
-                        <label for="productStatus" class="col-sm-3 control-label">Status: </label>
-                        <label class="col-sm-1 control-label">: </label>
-                        <div class="col-sm-8">
-                            <select class="form-control" id="productStatus" name="productStatus">
-                                <option value="">~~SELECT~~</option>
-                                <option value="1">Available</option>
-                                <option value="2">Not Available</option>
-                            </select>
-                        </div>
-                    </div> <!-- /form-group-->
-                </div> <!-- /modal-body -->
+                        <div class="form-group">
+                            <label for="productStatus" class="col-sm-3 control-label">Status: </label>
+                            <label class="col-sm-1 control-label">: </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="productStatus" name="productStatus">
+                                    <option value="">~~SELECT~~</option>
+                                    <option value="1">Available</option>
+                                    <option value="2">Not Available</option>
+                                </select>
+                            </div>
+                        </div> <!-- /form-group-->
+                    </div> <!-- /modal-body -->
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"> <i
-                            class="glyphicon glyphicon-remove-sign"></i> Close</button>
-                    <button type="submit" class="btn btn-primary" id="createProductBtn"
-                        data-loading-text="Loading..." autocomplete="off"> <i
-                            class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
-                </div> <!-- /modal-footer -->
-            </form> <!-- /.form -->
-        </div> <!-- /modal-content -->
-    </div> <!-- /modal-dailog -->
-</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"> <i
+                                class="glyphicon glyphicon-remove-sign"></i> Close</button>
+                        <button type="submit" class="btn btn-primary" id="createProductBtn"
+                            data-loading-text="Loading..." autocomplete="off"> <i
+                                class="glyphicon glyphicon-ok-sign"></i> Save Changes</button>
+                    </div> <!-- /modal-footer -->
+                </form> <!-- /.form -->
+            </div> <!-- /modal-content -->
+        </div> <!-- /modal-dailog -->
+    </div>
 @endcan
 <!-- /add product -->
 
@@ -266,7 +271,11 @@
                             <form class="form-horizontal" id="editProductForm" onsubmit="updateProduct(event)"
                                 method="POST">
                                 <br />
-                                <div id="edit-product-messages"></div>
+                                @if ($errors->any())
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                @endif
                                 <div class="form-group">
                                     <label for="editProductName" class="col-sm-3 control-label">Product Name: </label>
                                     <label class="col-sm-1 control-label">: </label>
@@ -319,7 +328,8 @@
                                             name="editCategoryName">
                                             <option value="">~~SELECT~~</option>
                                             @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" selected="{{$category->id == $product->category_id}}">
+                                                <option value="{{ $category->id }}"
+                                                    selected="{{ $category->id == $product->category_id }}">
                                                     {{ $category->name }}</option>
                                             @endforeach
                                         </select>
@@ -390,6 +400,10 @@
 </div><!-- remove product -->
 
 <script>
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
     function previewAddProductImage(event) {
         var input = event.target;
         var reader = new FileReader();
@@ -421,6 +435,11 @@
         fetch('api/update-product-image/' + document.getElementById('editProductId').value, {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -437,6 +456,34 @@
             });
     }
 
+    function addProduct(event) {
+        event.preventDefault();
+        var formData = new FormData(event.target);
+
+        fetch('api/create-product', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to create product');
+                }
+            })
+            .then(data => {
+                window.location.href = '/product';
+            })
+            .catch(error => {
+                console.error('Failed to update product:', error);
+            });
+    }
+
     function updateProduct(event) {
         event.preventDefault();
         var formData = new FormData(event.target);
@@ -444,6 +491,11 @@
         fetch('api/update-product/' + document.getElementById('editProductId').value, {
                 method: 'POST',
                 body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -469,6 +521,11 @@
 
         fetch('api/delete-product/' + id, {
                 method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
@@ -490,6 +547,11 @@
 
         fetch('api/get-product/' + id, {
                 method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(),
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {

@@ -35,6 +35,19 @@ Route::group([
 ], function ($router) {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::post('/create-product', [ProductController::class, 'store']);
+    Route::get('/get-product/{id}', [ProductController::class, 'show']);
+    Route::post('/update-product-image/{id}', [ProductController::class, 'updateProductImage']);
+    Route::post('/update-product/{id}', [ProductController::class, 'update']);
+    Route::post('/delete-product/{id}', [ProductController::class, 'destroy']);
+    Route::post('/create-category', [CategoryController::class, 'store']);
+    Route::get('/get-category/{id}', [CategoryController::class, 'show']);
+    Route::post('/update-category/{id}', [CategoryController::class, 'update']);
+    Route::delete('/delete-category/{id}', [CategoryController::class, 'destroy']);
+    Route::post('/create-brand', [BrandController::class, 'store']);
+    Route::get('/get-brand/{id}', [BrandController::class, 'show']);
+    Route::post('/update-brand/{id}', [BrandController::class, 'update']);
+    Route::delete('/delete-brand/{id}', [BrandController::class, 'destroy']);
     Route::post('/changeUsername', [SettingController::class, 'changeUsername'])
     ->name('changeUsername');
     Route::post('/changePassword', [SettingController::class, 'changePassword'])
@@ -47,21 +60,7 @@ Route::group([
     Route::post('/create-order', [OrderController::class, 'store']);
 });
 
-Route::post('/create-categories', [CategoryController::class, 'store']);
-Route::get('/get-categories/{id}', [CategoryController::class, 'show']);
-Route::post('/edit-categories/{id}', [CategoryController::class, 'update']);
-Route::delete('/delete-categories/{id}', [CategoryController::class, 'destroy']);
 
-Route::post('/create-brands', [BrandController::class, 'store']);
-Route::get('/get-brands/{id}', [BrandController::class, 'show']);
-Route::post('/edit-brand/{id}', [BrandController::class, 'update']);
-Route::delete('/delete-brands/{id}', [BrandController::class, 'destroy']);
-//product
-Route::post('/create-product', [ProductController::class, 'store']);
-Route::get('/get-product/{id}', [ProductController::class, 'show']);
-Route::post('/update-product-image/{id}', [ProductController::class, 'updateProductImage']);
-Route::post('/update-product/{id}', [ProductController::class, 'update']);
-Route::post('/delete-product/{id}', [ProductController::class, 'destroy']);
 
 //manage order
 Route::get('/get-order/{id}', [OrderController::class, 'show']);

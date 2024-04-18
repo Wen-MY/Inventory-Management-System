@@ -20,12 +20,6 @@ class Product extends Model
         'status'
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array<int, string>
-     */
-
     public function brand()
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');

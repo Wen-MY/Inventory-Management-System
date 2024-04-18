@@ -34,24 +34,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //uncomment for report
-        // $request->validate([
-        //     'productImage' => 'required',
-        //     'productName' => 'required',
-        //     'quantity' => 'required|numeric',
-        //     'rate' => 'required|numeric',
-        //     'productStatus' => 'required|numeric',
-        // ]);
+        $request->validate([
+            'productImage' => 'required',
+            'productName' => 'required',
+            'quantity' => 'required|numeric',
+            'rate' => 'required|numeric',
+            'productStatus' => 'required|numeric',
+        ]);
 
         try {
-            //authorization check
             $this->authorizeForUser(auth('api')->user(),'create',Product::class);
            
             $imageName = time().'.'.$request->productImage->extension();  
             $request->productImage->move(public_path('images'), $imageName);
 
             Product::create([
-                'image' => 'images/' . $imageName, // Assuming 'image' is the column in your database table
+                'image' => 'images/' . $imageName, 
                 'name' => $request->productName,
                 'quantity' => $request->quantity,
                 'rate' => $request->rate,
@@ -59,9 +57,9 @@ class ProductController extends Controller
                 'category_id' => $request->categoryName,
                 'status' => $request->productStatus,
             ]);
-            return redirect('product')->with('success', 'Product created successfully.');
+            return response()->json(['message' => 'Product created successfully'], 200);
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error' ,'Failed to create product.' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create product: ' . $e->getMessage()], 500);
         }
     }    
 
@@ -101,22 +99,22 @@ class ProductController extends Controller
 
     public function updateProductImage(Request $request, $id)
     {
-        // $request->validate([
-        //     'productImage' => 'required',
-        //     'productName' => 'required',
-        //     'quantity' => 'required|numeric',
-        //     'rate' => 'required|numeric',
-        //     'productStatus' => 'required|numeric',
-        // ]);
+        $request->validate([
+            'productImage' => 'required',
+            'productName' => 'required',
+            'quantity' => 'required|numeric',
+            'rate' => 'required|numeric',
+            'productStatus' => 'required|numeric',
+        ]);
         
         try {
             $product = Product::findOrFail($id);
             $this->authorizeForUser(auth('api')->user(),'update',$product);
             if ($request->hasFile('editProductImage')) {
                 $image = $request->file('editProductImage');
-                $imageName = time().'.'.$image->extension();  // Use $image->extension() instead of $request->productImage->extension()
+                $imageName = time().'.'.$image->extension();  
                 $image->move(public_path('images'), $imageName);
-                $product->image = 'images/' . $imageName; // Assuming 'image' is the column in your database table
+                $product->image = 'images/' . $imageName; 
             }
     
             $product->save();
@@ -141,7 +139,6 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
             $this->authorizeForUser(auth('api')->user(),'update',$product);
-            // Update the attributes
             $product->name = $request->input('editProductName');
             $product->quantity = $request->input('editQuantity');
             $product->rate = $request->input('editRate');
@@ -149,7 +146,6 @@ class ProductController extends Controller
             $product->category_id = $request->input('editCategoryName');
             $product->status = $request->input('editProductStatus');
             
-            // Save the changes
             $product->save();
     
             return response()->json(['message' => 'Product updated successfully.'], 200);
