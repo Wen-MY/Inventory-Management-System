@@ -16,7 +16,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny',Order::class); //using web so no need use authorize for
+        $this->authorize('viewAny',Order::class); 
         $orders = Order::paginate(10);
         $products = Product::all();
         
@@ -42,7 +42,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        /*
         $request->validate([
             'orderDate' => 'required',
             'clientName' => 'required|string|max:255',
@@ -59,7 +58,7 @@ class OrderController extends Controller
             'paymentPlace' => 'required|integer',
             'gstn' => 'nullable|string|max:255|regex:/^[0-9A-Za-z]+$/',
         ]);
-        */
+
         try{
             $this->authorizeForUser(auth('api')->user(),'create',Order::class);
             $order = new Order;
@@ -130,25 +129,24 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //uncomment for report
-        // $request->validate([
-        //     'clientName' => 'required|string',
-        //     'clientContact' => 'required|numeric',
-        //     'subTotalValue' => 'required|numeric',
-        //     'vatValue' => 'required|numeric',
-        //     'totalAmountValue' => 'required|numeric',
-        //     'discount' => 'required|numeric',
-        //     'grandTotalValue' => 'required|numeric',
-        //     'paid' => 'required|numeric',
-        //     'dueValue' => 'required|numeric',
-        //     'paymentTypeSelect' => 'required|numeric',
-        //     'paymentStatusSelect' => 'required|numeric', 
-        //     'paymentPlaceSelect' => 'required|numeric',
-        //     'gstn' => 'required|numeric',
-        //     'rateValue' => 'required|numeric',
-        //     'quantity' => 'required|numeric',
-        //     'totalValue' => 'required|numeric',
-        // ]);
+        $request->validate([
+            'clientName' => 'required|string',
+            'clientContact' => 'required|numeric',
+            'subTotalValue' => 'required|numeric',
+            'vatValue' => 'required|numeric',
+            'totalAmountValue' => 'required|numeric',
+            'discount' => 'required|numeric',
+            'grandTotalValue' => 'required|numeric',
+            'paid' => 'required|numeric',
+            'dueValue' => 'required|numeric',
+            'paymentTypeSelect' => 'required|numeric',
+            'paymentStatusSelect' => 'required|numeric', 
+            'paymentPlaceSelect' => 'required|numeric',
+            'gstn' => 'required|numeric',
+            'rateValue' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'totalValue' => 'required|numeric',
+        ]);
 
         try {
             $order = Order::findOrFail($id);

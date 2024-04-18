@@ -43,7 +43,7 @@ class CategoryController extends Controller
                 'status'=> $request->categoriesStatus,
             ]);
             
-            return redirect('categories')->with('success', 'Category created successfully.');
+            return response()->json(['message' => 'Success to create category.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to create category.'], 500);
         }
@@ -93,7 +93,7 @@ class CategoryController extends Controller
                 'status' => $request->editCategoriesStatus,
             ]);
 
-            return redirect('categories')->with('success', 'Category updated successfully.');
+            return response()->json(['message' => 'Success to update category.'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Failed to update category.'], 500);
         }

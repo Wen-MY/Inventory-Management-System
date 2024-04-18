@@ -1,12 +1,21 @@
 <x-header />
 <script>
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
     function generateReport(event) {
         event.preventDefault();
         var formData = new FormData(event.target);
 
         fetch('api/generate-report/', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Authorization': 'Bearer ' + getToken(), // Include bearer token
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (response.ok) {
