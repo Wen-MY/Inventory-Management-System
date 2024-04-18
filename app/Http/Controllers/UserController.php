@@ -15,20 +15,13 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
-        $users = User::paginate(10); //password will not visible
+        $users = User::paginate(10); 
         return view('user', ['users' => $users]);
     }
-    //if(session('user.id'))
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        
+        /*
         $request->validate([
             'username' => 'required|max:50',
             'password' => 'required|min:8',
@@ -37,7 +30,7 @@ class UserController extends Controller
         ], [
             'email.unique' => 'This email address is already in use.'
         ]);
-
+*/
         try {
             User::create([
                 'username' => $request->username,
@@ -51,13 +44,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $req, $id)
     {
         /*
@@ -75,6 +61,27 @@ class UserController extends Controller
             return response()->json(['message' => 'User updated successfully.'], 200);
         }catch(\Exception $e){
             return response()->json(['message' => 'Failed to update user.'], 500);
+        }
+    }
+    public function destroy($id)
+    {
+        try{
+            $user = User::findOrFail($id);
+            $user->deleteOrFail();
+            return response()->json(['message' => 'User deleted successfully.'], 200);
+        }catch(\Exception $e){
+            return response()->json(['message' => 'Failed to delete user.'], 500);
+        }
+    }
+    public function show($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json(['message' => 'User retrieved successfully.', 'user' => $user], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'User not found.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to retrieve user.'], 500);
         }
     }
     /*
@@ -106,27 +113,6 @@ class UserController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        try{
-            $user = User::findOrFail($id);
-            $user->deleteOrFail();
-            return response()->json(['message' => 'User deleted successfully.'], 200);
-        }catch(\Exception $e){
-            return response()->json(['message' => 'Failed to delete user.'], 500);
-        }
-    }
-    public function show($id)
-    {
-        try {
-            $user = User::findOrFail($id);
-            return response()->json(['message' => 'User retrieved successfully.', 'user' => $user], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['message' => 'User not found.'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve user.'], 500);
-        }
-    }
 
         /**
      * Soft delete the specified resource from storage.

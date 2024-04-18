@@ -17,7 +17,7 @@ class SettingController extends Controller
         $request->validate([
             'username' => 'required|max:50',
         ]);
-        $user = Auth::guard('api')->user(); //get user from token submited
+        $user = Auth::guard('api')->user(); 
         if (!$user) {
             return response()->json(['error' => 'User not found.'], 404);
         }
@@ -30,13 +30,13 @@ class SettingController extends Controller
 
     public function changePassword(Request $request)
     {
-        /*
+        
         $request->validate([
             'password' => 'required|min:8',
             'npassword' => 'required|min:8|confirmed',
         ]);
-        */
-        $user = Auth::guard('api')->user(); //get user from token submited
+        
+        $user = Auth::guard('api')->user(); 
         
         if (!$user) {
             return response()->json(['error' => 'User not found.'], 404);
