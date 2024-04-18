@@ -91,6 +91,12 @@
                 </div>
                 <div class="modal-body">
 
+                @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        @endif
+
                     <div id="add-brand-messages"></div>
 
                     <div class="form-group">

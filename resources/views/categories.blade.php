@@ -87,6 +87,11 @@
                     <h4 class="modal-title"><i class="fa fa-plus"></i> Add Categories</h4>
                 </div>
                 <div class="modal-body">
+                @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        @endif
                     <div id="add-categories-messages"></div>
                     <div class="form-group">
                         <label for="categoriesName" class="col-sm-4 control-label">Categories Name: </label>
